@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33414.496
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "api.deli.ru", "api.deli.ru\api.deli.ru.csproj", "{521EC9C4-4AB4-4651-864C-1E041E7983D3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2D99F13E-A6DC-4B1C-B69A-A9AB5B0AFEA5}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleClient", "ConsoleClient\ConsoleClient.csproj", "{30FB5587-89B9-496A-93EC-23DA4831305B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "auth.deli.ru", "auth.deli.ru\auth.deli.ru.csproj", "{A53B5D96-0C84-4DD4-9C29-183A4BA13200}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "data.deli.ru", "data.deli.ru\data.deli.ru.csproj", "{05FAEF09-F46F-41A5-8873-F8FA1A8E8E7B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Auth_Debug|Any CPU = Auth_Debug|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{521EC9C4-4AB4-4651-864C-1E041E7983D3}.Auth_Debug|Any CPU.ActiveCfg = Auth_Debug|Any CPU
+		{521EC9C4-4AB4-4651-864C-1E041E7983D3}.Auth_Debug|Any CPU.Build.0 = Auth_Debug|Any CPU
+		{521EC9C4-4AB4-4651-864C-1E041E7983D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{521EC9C4-4AB4-4651-864C-1E041E7983D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{521EC9C4-4AB4-4651-864C-1E041E7983D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{521EC9C4-4AB4-4651-864C-1E041E7983D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30FB5587-89B9-496A-93EC-23DA4831305B}.Auth_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30FB5587-89B9-496A-93EC-23DA4831305B}.Auth_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30FB5587-89B9-496A-93EC-23DA4831305B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30FB5587-89B9-496A-93EC-23DA4831305B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30FB5587-89B9-496A-93EC-23DA4831305B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30FB5587-89B9-496A-93EC-23DA4831305B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A53B5D96-0C84-4DD4-9C29-183A4BA13200}.Auth_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A53B5D96-0C84-4DD4-9C29-183A4BA13200}.Auth_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A53B5D96-0C84-4DD4-9C29-183A4BA13200}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A53B5D96-0C84-4DD4-9C29-183A4BA13200}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A53B5D96-0C84-4DD4-9C29-183A4BA13200}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A53B5D96-0C84-4DD4-9C29-183A4BA13200}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05FAEF09-F46F-41A5-8873-F8FA1A8E8E7B}.Auth_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05FAEF09-F46F-41A5-8873-F8FA1A8E8E7B}.Auth_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05FAEF09-F46F-41A5-8873-F8FA1A8E8E7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05FAEF09-F46F-41A5-8873-F8FA1A8E8E7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05FAEF09-F46F-41A5-8873-F8FA1A8E8E7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05FAEF09-F46F-41A5-8873-F8FA1A8E8E7B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {56B9131A-C364-4805-81CF-6E5F797C8185}
+	EndGlobalSection
+EndGlobal
