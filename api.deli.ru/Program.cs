@@ -74,6 +74,7 @@ namespace api.deli.ru
 				// лучше использовать передачу данных по протоколу https.
 				config.RequireHttpsMetadata = false;
 
+				
 				//параметры валидации токена
 				config.TokenValidationParameters = new TokenValidationParameters
 				{

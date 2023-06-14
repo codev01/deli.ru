@@ -25,7 +25,7 @@ namespace api.deli.ru.Controllers
 			return await _categoryService.GetById(categoryIds);
 		}
 
-		[Auth]
+		[Auth(Roles = "admin, dev")]
 		[HttpGet]
 		public async Task<IEnumerable<Category>> GetCategories()
 		{

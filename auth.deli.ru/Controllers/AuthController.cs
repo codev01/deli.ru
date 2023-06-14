@@ -6,6 +6,7 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using static auth.deli.ru.Controllers.AuthController;
 
 namespace auth.deli.ru.Controllers
 {
@@ -25,6 +26,22 @@ namespace auth.deli.ru.Controllers
 	[Route("[controller].[action]")]
 	public class AuthController : ControllerBase
 	{
+
+		private static List<Person> People = new List<Person>
+		{
+			new Person { UserName = "int", Email="admin@gmail.com", Password="00000", Role = "landlord" },
+			new Person { UserName = "rx1310", Email="analitik@gmail.com", Password="11111", Role = "tenant" },
+			new Person { UserName = "codev01", Email="developer@gmail.com", Password="55987", Role = "landlord" },
+			new Person { UserName = "tomodachi", Email="developer@gmail.com", Password="54321", Role = "lendlord" },
+			new Person { UserName = "gambit", Email="qwerty@gmail.com", Password="00001", Role = "tenant" }
+		};
+		private static List<App> Apps = new List<App>
+		{
+			new App{ Id = 111111111, ClientSecret = "qwertyuiop", Scopes = new[]{ "natural" }, Version = "1.2" },
+			new App{ Id = 222222222, ClientSecret = "asdfghjkl", Scopes = new[]{ "legal" }, Version = "1.0.2" },
+			new App{ Id = 222222222, ClientSecret = "asdfghjkl", Scopes = new[]{ "natural", "legal" }, Version = "1"},
+			new App{ Id = 222222222, ClientSecret = "asdfghjkl", Scopes = new[]{ "legal", "elevatedUser" }, Version = "special"}
+		};
 
 		[HttpGet]
 		public IActionResult Login(string username, string password)
@@ -46,7 +63,6 @@ namespace auth.deli.ru.Controllers
 					expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
 					signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), 
 															   SecurityAlgorithms.HmacSha256));
-
 			var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
 			var response = new
@@ -57,75 +73,58 @@ namespace auth.deli.ru.Controllers
 
 			return Ok(response);
 		}
-
-
-
-		private static ClaimsIdentity GetIdentity(string username, string password)
+		private string GenerateToken(App app, Person person)
 		{
-			Person person = people.FirstOrDefault(x => x.UserName == username && x.Password == password);
-			if (person != null)
+			var appIdentity = GetAppIdentity(app);
+			var userIdentity = GetUserIdentity(person);
+			var identity = new ClaimsIdentity(appIdentity.Claims.Union(userIdentity.Claims));  
+
+			return null;
+		}
+
+		private ClaimsIdentity GetAppIdentity(App app)
+		{
+			App? validApp = Apps.FirstOrDefault(x => x.Id == app.Id && x.ClientSecret == app.ClientSecret);
+			if (validApp != null)
 			{
 				var claims = new List<Claim>
 				{
-					new Claim(JwtRegisteredClaimNames.UniqueName, person.UserName),
-					new Claim(ClaimTypes.Email, person.Email),
-					new Claim(ClaimTypes.Role, person.Role),
-					new Claim(ClaimTypes.MobilePhone, person.MobilePhone),
-					//new Claim(ClaimTypes., person.MobilePhone)
+					new Claim("app_id", validApp.Id.ToString()),
+					new Claim("app_version", validApp.Version)
+				};
+				foreach (string scope in validApp.Scopes)
+					claims.Add(new Claim("app_scope", scope));
+
+				ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims);
+				return claimsIdentity;
+			}
+			else
+				// если пользователя не найдено
+				throw new ArgumentException("Invalid username or password.");
+		}
+
+
+		private ClaimsIdentity GetUserIdentity(Person person)
+		{
+			Person? validPerson = People.FirstOrDefault(x => x.UserName == person.UserName && 
+													    x.Password == person.Password);
+			if (validPerson != null)
+			{
+				var claims = new List<Claim>
+				{
+					new Claim(ClaimTypes.NameIdentifier, validPerson.UserName),
+					new Claim(ClaimTypes.Email, validPerson.Email),
+					new Claim(ClaimTypes.Role, validPerson.Role),
+					new Claim(ClaimTypes.MobilePhone, validPerson.MobilePhone)
 				};
 				ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims);
 				return claimsIdentity;
 			}
-
-			// если пользователя не найдено
-			return null;
-		}
-		private static List<Person> people = new List<Person>
-		{
-			new Person { UserName = "int", Email="admin@gmail.com", Password="00000", Role = "admin" },
-			new Person { UserName = "rx1310", Email="analitik@gmail.com", Password="11111", Role = "analitik" },
-			new Person { UserName = "codev01", Email="developer@gmail.com", Password="55987", Role = "dev" },
-			new Person { UserName = "tomodachi", Email="developer@gmail.com", Password="54321", Role = "dev" },
-			new Person { UserName = "gambit", Email="qwerty@gmail.com", Password="00001", Role = "user" }
-		};
-		private static List<App> Apps = new List<App>
-		{
-			new App{ Id = 111111111, Secret = "qwertyuiop" },
-			new App{ Id = 222222222, Secret = "asdfghjkl" }
-		};
-		public class Person
-		{
-			public string UserName { get; set; }
-			public string Password { get; set; }
-			public string Role { get; set; }
-			public string Email { get; set; }
-			public string MobilePhone { get; set; }
-		}
-		public class App
-		{
-			public int Id { get; set; }
-			public string Secret { get; set; }
+			else
+				// если пользователя не найдено
+				throw new ArgumentException("Invalid username or password.");
 		}
 
-		private static string GenerateToken(string username, string password)
-		{
-			//var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-			//var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-			//var secToken = new JwtSecurityToken(
-			//	signingCredentials: credentials,
-			//	issuer: "Sample",
-			//	audience: "Sample",
-			//	claims: new[]
-			//	{
-			//	new Claim(JwtRegisteredClaimNames.Sub, "meziantou")
-			//	},
-			//	expires: DateTime.UtcNow.AddDays(1));
-
-			//var handler = new JwtSecurityTokenHandler();
-			//return handler.WriteToken(secToken);
-			return null;
-		}
 		public static bool ValidateToken(string authToken)
 		{
 			var tokenHandler = new JwtSecurityTokenHandler();
@@ -156,6 +155,21 @@ namespace auth.deli.ru.Controllers
 				ValidAudience = AuthOptions.AUDIENCE,
 				IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey() // The same key as the one that generate the token
 			};
+		}
+		public class Person
+		{
+			public string UserName { get; set; }
+			public string Password { get; set; }
+			public string Role { get; set; }
+			public string Email { get; set; }
+			public string MobilePhone { get; set; }
+		}
+		public class App
+		{
+			public int Id { get; set; }
+			public string ClientSecret { get; set; }
+			public string[] Scopes { get; set; }
+			public string Version { get; set; }
 		}
 	}
 }
