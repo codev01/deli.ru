@@ -16,7 +16,8 @@ namespace auth.deli.ru
 			var builder = WebApplication.CreateBuilder(args);
 			IServiceCollection services = builder.Services;
 
-
+			// выставляем возможные стороки для обращения к api
+			builder.WebHost.UseUrls("http://0.0.0.0:1210", "http://localhost:1210");
 
 			services.AddAuthorization();
 			// Add services to the container.

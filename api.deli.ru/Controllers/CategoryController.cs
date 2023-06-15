@@ -25,7 +25,7 @@ namespace api.deli.ru.Controllers
 			return await _categoryService.GetById(categoryIds);
 		}
 
-		[Auth(Roles = "admin, dev")]
+		[Auth(Policy = "landlord")]
 		[HttpGet]
 		public async Task<IEnumerable<Category>> GetCategories()
 		{

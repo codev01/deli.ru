@@ -1,5 +1,8 @@
 ﻿using System.Net;
+using System.Reflection;
 using System.Text;
+
+using api.deli.ru.Filters;
 using api.deli.ru.Managers;
 using api.deli.ru.Middlewares;
 using data.deli.ru.MongoDB.Serializers;
@@ -42,46 +45,46 @@ namespace api.deli.ru
 #endif
 			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
 				AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config =>
-			{
-				//config.Authority = ""
-
-				var key = AuthOptions.GetSymmetricSecurityKey();
-				config.Events = new JwtBearerEvents
 				{
-					OnMessageReceived = context =>
+					var key = AuthOptions.GetSymmetricSecurityKey();
+
+					// если равно false, то SSL при отправке токена не используется.
+					// Однако данный вариант установлен только дя тестирования.
+					// лучше использовать передачу данных по протоколу https.
+					config.RequireHttpsMetadata = false;
+
+					
+					//параметры валидации токена
+					config.TokenValidationParameters = new TokenValidationParameters
 					{
-						if (context.Request.Query.ContainsKey("Token"))
-						{
-							context.Token = context.Request.Query["Token"];
-						}
-						else if (context.Request.Headers.ContainsKey("Token"))
-						{
-							context.Token = context.Request.Headers["Token"]; 
-							var userId = ValidateToken(context.Token);
-							//if (userId != null)
-							//{
-							//	// attach user to context on successful jwt validation
-							//	context.
-							//	context.Items["UserId"] = userId;
-							//}
-						}
-						return Task.CompletedTask;
-					}
-				};
+						ValidateIssuer = true, // Валидация источника токена
+						ValidateAudience = true, // Валидация получателя токена
+						ValidateLifetime = true, // Валидация срока действия токена
+						ValidateIssuerSigningKey = true, // Валидация ключа подписи токена
+						
+						// Указание верных источника и получателя токена
+						ValidIssuer = AuthOptions.ISSUER,
+						ValidAudience = AuthOptions.AUDIENCE,
 
-				// если равно false, то SSL при отправке токена не используется.
-				// Однако данный вариант установлен только дя тестирования.
-				// лучше использовать передачу данных по протоколу https.
-				config.RequireHttpsMetadata = false;
+						// Указание параметров валидации, например, секретного ключа и других
+						// Вам нужно будет заменить "YOUR_SECRET_KEY" на ваш секретный ключ
+						IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey() // The same key as the one that generate the token
+					};
+				});
 
-				
-				//параметры валидации токена
-				config.TokenValidationParameters = new TokenValidationParameters
+			// Конфигурация авторизации по ролям
+			services.AddAuthorization(options =>
+			{
+				options.AddPolicy("tenant", policy =>
 				{
-					ValidIssuer = AuthOptions.ISSUER,
-					ValidAudience = AuthOptions.AUDIENCE,
-					IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey() // The same key as the one that generate the token
-				};
+					policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
+					policy.RequireRole("tenant", "landlord");
+				});
+				options.AddPolicy("landlord", policy =>
+				{
+					policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
+					policy.RequireRole("landlord");
+				});
 			});
 
 			#region Swagger Configuration
@@ -90,34 +93,44 @@ namespace api.deli.ru
 				//This is to generate the Default UI of Swagger Documentation
 				swagger.SwaggerDoc("v1", new OpenApiInfo
 				{
-					Version = "v1",
 					Title = "deli.ru",
 					Description = "WWS"
 				});
-				// To Enable authorization using Swagger (JWT)
-				swagger.AddSecurityDefinition("Token", new OpenApiSecurityScheme()
+
+				var securityScheme = new OpenApiSecurityScheme()
 				{
-					Name = "Token",
+					Name = "Authorization",
 					Type = SecuritySchemeType.ApiKey,
-					Scheme = "Token",
+					Scheme = JwtBearerDefaults.AuthenticationScheme,
 					BearerFormat = "JWT",
 					In = ParameterLocation.Header,
-					Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
-				});
+					Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter your token",
+				};
+
+				// To Enable authorization using Swagger (JWT)
+				swagger.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
 				swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
 				{
 					{
-						  new OpenApiSecurityScheme
+						new OpenApiSecurityScheme
+						{
+							Reference = new OpenApiReference
 							{
-								Reference = new OpenApiReference
-								{
-									Type = ReferenceType.SecurityScheme,
-									Id = "Token"
-								}
-							},
-							new string[] {}
+								Type = ReferenceType.SecurityScheme,
+								Id = JwtBearerDefaults.AuthenticationScheme
+							}
+						},
+						new string[] { }
 					}
 				});
+
+				// Интеграция XML-комментариев с Swagger
+				var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+				var xmlCommentsPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
+				swagger.IncludeXmlComments(xmlCommentsPath);
+
+				// Добавление фильтра операции для автоматического добавления заголовка Authorization
+				//swagger.OperationFilter<SwaggerAuthorizationHeaderFilter>();
 			});
 			#endregion
 
@@ -232,7 +245,7 @@ namespace api.deli.ru
 			app.UseHttpsRedirection();
 
 			app.UseAuthentication();
-			//app.UseAuthorization();
+			app.UseAuthorization();
 
 			app.MapControllers();
 

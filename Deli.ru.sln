@@ -18,31 +18,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "data.deli.ru", "data.deli.r
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Auth_Debug|Any CPU = Auth_Debug|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{521EC9C4-4AB4-4651-864C-1E041E7983D3}.Auth_Debug|Any CPU.ActiveCfg = Auth_Debug|Any CPU
-		{521EC9C4-4AB4-4651-864C-1E041E7983D3}.Auth_Debug|Any CPU.Build.0 = Auth_Debug|Any CPU
 		{521EC9C4-4AB4-4651-864C-1E041E7983D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{521EC9C4-4AB4-4651-864C-1E041E7983D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{521EC9C4-4AB4-4651-864C-1E041E7983D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{521EC9C4-4AB4-4651-864C-1E041E7983D3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{30FB5587-89B9-496A-93EC-23DA4831305B}.Auth_Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30FB5587-89B9-496A-93EC-23DA4831305B}.Auth_Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30FB5587-89B9-496A-93EC-23DA4831305B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{30FB5587-89B9-496A-93EC-23DA4831305B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30FB5587-89B9-496A-93EC-23DA4831305B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30FB5587-89B9-496A-93EC-23DA4831305B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A53B5D96-0C84-4DD4-9C29-183A4BA13200}.Auth_Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A53B5D96-0C84-4DD4-9C29-183A4BA13200}.Auth_Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A53B5D96-0C84-4DD4-9C29-183A4BA13200}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A53B5D96-0C84-4DD4-9C29-183A4BA13200}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A53B5D96-0C84-4DD4-9C29-183A4BA13200}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A53B5D96-0C84-4DD4-9C29-183A4BA13200}.Release|Any CPU.Build.0 = Release|Any CPU
-		{05FAEF09-F46F-41A5-8873-F8FA1A8E8E7B}.Auth_Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05FAEF09-F46F-41A5-8873-F8FA1A8E8E7B}.Auth_Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05FAEF09-F46F-41A5-8873-F8FA1A8E8E7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{05FAEF09-F46F-41A5-8873-F8FA1A8E8E7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05FAEF09-F46F-41A5-8873-F8FA1A8E8E7B}.Release|Any CPU.ActiveCfg = Release|Any CPU

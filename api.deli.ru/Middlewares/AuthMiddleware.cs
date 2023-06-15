@@ -21,14 +21,7 @@ namespace api.deli.ru.Middlewares
 
 		public async Task Invoke(HttpContext context)
 		{
-			var token = context.Request.Headers["Token"];
-			var userId = ValidateToken(token);
-			if (userId != null)
-			{
-				// attach user to context on successful jwt validation
-				context.Items["UserId"] = userId;
-			}
-
+			context.Request.Headers["Authorization"] = "Bearer " + context.Request.Headers["Authorization"];
 			await _next(context);
 		}
 		public static bool ValidateToken(string authToken)
@@ -65,8 +58,8 @@ namespace api.deli.ru.Middlewares
 		public class AuthOptions
 		{
 			public const string ISSUER = "auth.deli.ru"; // издатель токена
-			public const string AUDIENCE = "webClient.deli.ru"; // потребитель токена
-			const string KEY = "401b09eab3c013d4ca54922bb802bec8fd5318192b0a75f201d8b3727429090fb337591abd3e44453b954555b7a0812e1081c39b740293f765eae731f5a65ed1!123";   // ключ для шифрации
+			public const string AUDIENCE = "api.deli.ru"; // потребитель токена
+			const string KEY = @"1234567890йцукенгшщз";   // ключ для шифрации
 			public const int LIFETIME = 43200; // время жизни токена - 1 минута
 			public static SymmetricSecurityKey GetSymmetricSecurityKey()
 			{
