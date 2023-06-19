@@ -2,6 +2,7 @@
 
 namespace api.deli.ru.Attributes
 {
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
 	public class AuthAttribute
 #if DEBUG
 		: Attribute, IAuthorizeData
@@ -12,10 +13,11 @@ namespace api.deli.ru.Attributes
 	{
 
 #if DEBUG
+		public string Scopes { get; set; }
 		public string Policy { get; set; }
 		public string Roles { get; set; }
 		public string AuthenticationSchemes { get; set; }
 #endif
 
-	}
+    }
 }

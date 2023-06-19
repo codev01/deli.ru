@@ -8,7 +8,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <StartupObject></StartupObject>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
-    <Configurations>Debug;Release;Auth_Debug</Configurations>
+    <Configurations>Debug;Release</Configurations>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 

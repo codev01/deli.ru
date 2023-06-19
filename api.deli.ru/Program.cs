@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Text;
 
+using api.deli.ru.Constants;
 using api.deli.ru.Filters;
 using api.deli.ru.Managers;
 using api.deli.ru.Middlewares;
@@ -43,34 +44,35 @@ namespace api.deli.ru
 			// выставляем возможные стороки для обращения к api
 			builder.WebHost.UseUrls(Properties.ApiConfigurations.UseUrls);
 #endif
-			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
-				AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config =>
-				{
-					var key = AuthOptions.GetSymmetricSecurityKey();
+			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
+			//services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
+			//	AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config =>
+			//	{
+			//		var key = AuthOptions.GetSymmetricSecurityKey();
 
-					// если равно false, то SSL при отправке токена не используется.
-					// Однако данный вариант установлен только дя тестирования.
-					// лучше использовать передачу данных по протоколу https.
-					config.RequireHttpsMetadata = false;
+			//		// если равно false, то SSL при отправке токена не используется.
+			//		// Однако данный вариант установлен только дя тестирования.
+			//		// лучше использовать передачу данных по протоколу https.
+			//		config.RequireHttpsMetadata = false;
 
 					
-					//параметры валидации токена
-					config.TokenValidationParameters = new TokenValidationParameters
-					{
-						ValidateIssuer = true, // Валидация источника токена
-						ValidateAudience = true, // Валидация получателя токена
-						ValidateLifetime = true, // Валидация срока действия токена
-						ValidateIssuerSigningKey = true, // Валидация ключа подписи токена
+			//		//параметры валидации токена
+			//		config.TokenValidationParameters = new TokenValidationParameters
+			//		{
+			//			ValidateIssuer = true, // Валидация источника токена
+			//			ValidateAudience = true, // Валидация получателя токена
+			//			ValidateLifetime = true, // Валидация срока действия токена
+			//			ValidateIssuerSigningKey = true, // Валидация ключа подписи токена
 						
-						// Указание верных источника и получателя токена
-						ValidIssuer = AuthOptions.ISSUER,
-						ValidAudience = AuthOptions.AUDIENCE,
+			//			// Указание верных источника и получателя токена
+			//			ValidIssuer = AuthOptions.ISSUER,
+			//			ValidAudience = AuthOptions.AUDIENCE,
 
-						// Указание параметров валидации, например, секретного ключа и других
-						// Вам нужно будет заменить "YOUR_SECRET_KEY" на ваш секретный ключ
-						IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey() // The same key as the one that generate the token
-					};
-				});
+			//			// Указание параметров валидации, например, секретного ключа и других
+			//			// Вам нужно будет заменить "YOUR_SECRET_KEY" на ваш секретный ключ
+			//			IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey() // The same key as the one that generate the token
+			//		};
+			//	});
 
 			// Конфигурация авторизации по ролям
 			services.AddAuthorization(options =>
@@ -99,7 +101,7 @@ namespace api.deli.ru
 
 				var securityScheme = new OpenApiSecurityScheme()
 				{
-					Name = "Authorization",
+					Name = Headers.TokenHeaderName,
 					Type = SecuritySchemeType.ApiKey,
 					Scheme = JwtBearerDefaults.AuthenticationScheme,
 					BearerFormat = "JWT",
@@ -138,7 +140,10 @@ namespace api.deli.ru
 			services.AddCors();
 
 			// Add services to the container.
-			services.AddControllers();
+			//services.AddControllers(options =>
+			//{
+			//	options.Filters.Add<AuthFilter>();
+			//});
 
 			// Игнорирование свойств при сериализации
 			services.AddControllers()
@@ -232,15 +237,17 @@ namespace api.deli.ru
 			app.UseSwaggerUI();
 			//////////////////////////////////////////////////////////////////////
 
+
+			// обязательно!! сначала UseRouting и только потом UseMiddleware
+			app.UseRouting();
 			// ловит исключения
 			// про конвееры и middleware: https://metanit.com/sharp/aspnet5/2.4.php
-			app.UseMiddleware<ExceptionMiddleware>();
 			app.UseMiddleware<AuthMiddleware>();
+			app.UseMiddleware<ExceptionMiddleware>();
+
 			// обработка ошибок HTTP 
 			//app.UseStatusCodePagesWithRedirects("/");
 
-			//app.UseCors("CorsPolicy");
-			//app.UseRouting();
 
 			app.UseHttpsRedirection();
 

@@ -8,12 +8,14 @@ using System.Drawing;
 using data.deli.ru.Types;
 using data.deli.ru.MongoDB.Services.Contracts;
 using Microsoft.AspNetCore.Authorization;
+using api.deli.ru.Filters;
+using api.deli.ru.Constants;
 
 namespace api.deli.ru.Controllers
 {
     [ApiController]
 	[Route("[controller].[action]")]
-	public class CategoryController : ControllerBase, ICategoryService
+	public class CategoryController : Controller, ICategoryService
 	{
 		private readonly ICategoryService _categoryService;
 		public CategoryController(ICategoryService categoryService) 
@@ -25,8 +27,8 @@ namespace api.deli.ru.Controllers
 			return await _categoryService.GetById(categoryIds);
 		}
 
-		[Auth(Policy = "landlord")]
 		[HttpGet]
+		[Auth(Roles = Roles.All, Scopes = AppScopes.Categories)]
 		public async Task<IEnumerable<Category>> GetCategories()
 		{
 			return await _categoryService.GetCategories();

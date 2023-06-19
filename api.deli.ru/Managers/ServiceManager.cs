@@ -1,4 +1,5 @@
 ﻿using api.deli.ru.ConfigModels;
+using api.deli.ru.Filters;
 using api.deli.ru.Services;
 using api.deli.ru.Services.Contracts;
 
@@ -33,7 +34,8 @@ namespace api.deli.ru.Managers
 				services.AddSingleton<DataBaseManager>(new DataBaseManager(configs.DatabaseConnections, services));
 
 				services.AddSingleton<IFileService, LocalFileService>();
-				services.AddSingleton<AuthAttribute>();
+
+                services.AddSingleton<IAuthService, AuthService>();
 			}
 
 			return services;

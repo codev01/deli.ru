@@ -14,6 +14,9 @@ namespace data.deli.ru.MongoDB.Types
         public BsonObjectId(string value)
             => Value = value;
 
+        public static BsonObjectId Create(string value)
+            => new BsonObjectId(value);
+
         public static implicit operator BsonObjectId(ObjectId objectId)
             => new BsonObjectId(objectId.ToString());
 

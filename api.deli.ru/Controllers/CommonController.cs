@@ -7,7 +7,7 @@ namespace api.deli.ru.Controllers
 {
 	[ApiController]
 	[Route("[controller].[action]")]
-	public class CommonController : ControllerBase, ICityService
+	public class CommonController : Controller, ICityService
 	{
         private ICityService _cityService;
 

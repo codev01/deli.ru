@@ -27,8 +27,7 @@ namespace data.deli.ru.MongoDB.Services
 															double endLatitude = Location.MAX_LATITUBE,
 															double endLongitude = Location.MAX_LONGITUBE,
 															uint limit = DefaultParams.LARGE_LIMIT,
-															uint offset = DefaultParams.OFFSET_DEFAULT)
-		{
+															uint offset = DefaultParams.OFFSET_DEFAULT){
 			MongoExpressionManager expressions = new MongoExpressionManager();
 
 

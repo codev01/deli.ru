@@ -13,7 +13,7 @@ namespace api.deli.ru.Controllers
 {
 	[ApiController]
 	[Route("[controller].[action]")]
-	public class ProductController : ControllerBase, IProductService
+	public class ProductController : Controller, IProductService
 	{
 		//private readonly IFileService _fileService;
 
