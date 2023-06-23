@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using data.deli.ru.Bases;
+﻿using data.deli.ru.Bases;
 using data.deli.ru.Common;
 using data.deli.ru.MongoDB.Extensions;
 using data.deli.ru.MongoDB.Services.Contracts;
@@ -12,7 +10,7 @@ using BsonObjectId = data.deli.ru.MongoDB.Types.BsonObjectId;
 
 namespace data.deli.ru.MongoDB.Services
 {
-    public class ProductService : MongoServiceBase<Product>, IProductService
+	public class ProductService : MongoServiceBase<Product>, IProductService
 	{
 		public ProductService(DataBaseManager dataBaseManager) : base(dataBaseManager.Main, "products") { }
 
@@ -27,7 +25,8 @@ namespace data.deli.ru.MongoDB.Services
 															double endLatitude = Location.MAX_LATITUBE,
 															double endLongitude = Location.MAX_LONGITUBE,
 															uint limit = DefaultParams.LARGE_LIMIT,
-															uint offset = DefaultParams.OFFSET_DEFAULT){
+															uint offset = DefaultParams.OFFSET_DEFAULT)
+		{
 			MongoExpressionManager expressions = new MongoExpressionManager();
 
 
@@ -65,7 +64,7 @@ namespace data.deli.ru.MongoDB.Services
 			if (minRentPrice > maxRentPrice)
 				throw new ArgumentException("minRentPrice must not be greater than maxRentPrice");
 
-			filters.Add(builder.Gte(p => p.RentPrice, minRentPrice) & 
+			filters.Add(builder.Gte(p => p.RentPrice, minRentPrice) &
 						builder.Lte(p => p.RentPrice, maxRentPrice));
 
 			filters.Add(builder.Gte(p => p.FullPrice, minFullPrice) &

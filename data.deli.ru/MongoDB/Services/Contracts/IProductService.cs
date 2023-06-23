@@ -2,7 +2,7 @@
 {
 	public interface IProductService : IMongoServiceBase<Product>
 	{
-		Task<IEnumerable<Product>> GetProducts(string searchString, 
+		Task<IEnumerable<Product>> GetProducts(string searchString,
 											   string categoryId,
 											   double minRentPrice = DefaultParams.MIN_PRICE,
 											   double maxRentPrice = DefaultParams.MAX_PRICE,

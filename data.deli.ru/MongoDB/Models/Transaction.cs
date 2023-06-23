@@ -1,6 +1,6 @@
 ﻿namespace data.deli.ru.Models
 {
-    public enum TransactionStatus
+	public enum TransactionStatus
 	{
 		Open,
 		Completed,

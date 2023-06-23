@@ -1,10 +1,8 @@
-﻿using MongoDB.Bson;
-
-using BsonObjectId = data.deli.ru.MongoDB.Types.BsonObjectId;
+﻿using BsonObjectId = data.deli.ru.MongoDB.Types.BsonObjectId;
 
 namespace data.deli.ru.Models
 {
-    public class Product : IBsonObject, IDateObject
+	public class Product : IBsonObject, IDateObject
 	{
 		public BsonObjectId Id { get; set; }
 		public DateTime DateCreated { get; set; }

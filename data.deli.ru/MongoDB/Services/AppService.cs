@@ -6,6 +6,6 @@ namespace data.deli.ru.MongoDB.Services
 {
 	public class AppService : MongoServiceBase<App>, IAppService
 	{
-		public AppService(DataBaseManager dataBaseManager) : base(dataBaseManager.Main, "apps") { }
+		public AppService(DataBaseManager dataBaseManager) : base(dataBaseManager.Private, "apps") { }
 	}
 }

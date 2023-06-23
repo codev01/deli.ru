@@ -3,27 +3,22 @@ using System.Reflection;
 using System.Text;
 
 using api.deli.ru.Constants;
-using api.deli.ru.Filters;
+using api.deli.ru.Handlers;
 using api.deli.ru.Managers;
 using api.deli.ru.Middlewares;
+
 using data.deli.ru.MongoDB.Serializers;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 
-using NuGet.Common;
-
-using static api.deli.ru.Middlewares.AuthMiddleware;
-
 namespace api.deli.ru
 {
-    public class Program
+	public class Program
 	{
 		public static void Main(string[] args)
 		{
@@ -44,35 +39,13 @@ namespace api.deli.ru
 			// выставляем возможные стороки для обращения к api
 			builder.WebHost.UseUrls(Properties.ApiConfigurations.UseUrls);
 #endif
-			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
-			//services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
-			//	AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config =>
-			//	{
-			//		var key = AuthOptions.GetSymmetricSecurityKey();
-
-			//		// если равно false, то SSL при отправке токена не используется.
-			//		// Однако данный вариант установлен только дя тестирования.
-			//		// лучше использовать передачу данных по протоколу https.
-			//		config.RequireHttpsMetadata = false;
-
-					
-			//		//параметры валидации токена
-			//		config.TokenValidationParameters = new TokenValidationParameters
-			//		{
-			//			ValidateIssuer = true, // Валидация источника токена
-			//			ValidateAudience = true, // Валидация получателя токена
-			//			ValidateLifetime = true, // Валидация срока действия токена
-			//			ValidateIssuerSigningKey = true, // Валидация ключа подписи токена
-						
-			//			// Указание верных источника и получателя токена
-			//			ValidIssuer = AuthOptions.ISSUER,
-			//			ValidAudience = AuthOptions.AUDIENCE,
-
-			//			// Указание параметров валидации, например, секретного ключа и других
-			//			// Вам нужно будет заменить "YOUR_SECRET_KEY" на ваш секретный ключ
-			//			IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey() // The same key as the one that generate the token
-			//		};
-			//	});
+			services.AddAuthentication(options =>
+			{
+				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+				options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+			}).AddScheme<DefaultSchemeOptions, DefaultSchemeHandler>(JwtBearerDefaults.AuthenticationScheme,
+			options => { });
 
 			// Конфигурация авторизации по ролям
 			services.AddAuthorization(options =>
@@ -164,11 +137,10 @@ namespace api.deli.ru
 			{
 				Console.WriteLine($"\n{DateTime.Now} Запрос от {context.Connection.RemoteIpAddress}");
 				Console.WriteLine($"\n{context.Request.Path.Value + context.Request.QueryString.Value}");
-				await next.Invoke(); 
+				await next.Invoke();
 			});
 
 			//////////////////////////////////////////////////////////////////////
-			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
 			{
 				//app.Map("/", () => Results.Redirect("/swagger"));
@@ -237,22 +209,19 @@ namespace api.deli.ru
 			app.UseSwaggerUI();
 			//////////////////////////////////////////////////////////////////////
 
-
-			// обязательно!! сначала UseRouting и только потом UseMiddleware
-			app.UseRouting();
-			// ловит исключения
-			// про конвееры и middleware: https://metanit.com/sharp/aspnet5/2.4.php
-			app.UseMiddleware<AuthMiddleware>();
-			app.UseMiddleware<ExceptionMiddleware>();
-
-			// обработка ошибок HTTP 
-			//app.UseStatusCodePagesWithRedirects("/");
-
-
 			app.UseHttpsRedirection();
 
+			// тут последовательность решает!
+			app.UseRouting();
+			app.UseMiddleware<ExceptionMiddleware>();
 			app.UseAuthentication();
+			app.UseMiddleware<AuthMiddleware>();
 			app.UseAuthorization();
+			app.UseEndpoints(endpoints =>
+			{
+				endpoints.MapControllers();
+			});
+
 
 			app.MapControllers();
 

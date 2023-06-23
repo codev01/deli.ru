@@ -4,7 +4,7 @@ using MongoDB.Driver;
 
 namespace data.deli.ru.Bases
 {
-    public abstract class MongoServiceBase<T> where T : IBsonObject
+	public abstract class MongoServiceBase<T> where T : IBsonObject
 	{
 		protected MongoManager MongoManager { get; }
 		protected IMongoCollection<T> Collection { get; }

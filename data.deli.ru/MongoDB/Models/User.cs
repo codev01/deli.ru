@@ -1,6 +1,6 @@
 ﻿namespace data.deli.ru.Models
 {
-    public class User : IBsonObject, IDateObject
+	public class User : IBsonObject, IDateObject
 	{
 		public BsonObjectId Id { get; set; }
 		public DateTime DateCreated { get; set; }

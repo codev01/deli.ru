@@ -1,7 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-
-using api.deli.ru.Services.Contracts;
 
 using data.deli.ru.Common;
 using data.deli.ru.MongoDB.Services.Contracts;
@@ -26,9 +23,9 @@ namespace api.deli.ru.Controllers
 		}
 
 		[HttpGet]
-		public Task<IEnumerable<Product>> GetById(string[] ids) 
+		public Task<IEnumerable<Product>> GetById(string[] ids)
 			=> _productService.GetById(ids);
-		
+
 		[HttpGet]
 		public async Task<IEnumerable<Product>> GetProducts([Required] string searchString,
 																	   string categoryId,
@@ -42,19 +39,19 @@ namespace api.deli.ru.Controllers
 																	   double endLongitude = Location.MAX_LONGITUBE,
 																	   uint limit = DefaultParams.LARGE_LIMIT,
 																	   uint offset = DefaultParams.OFFSET_DEFAULT)
-			=> await _productService.GetProducts(searchString, 
-												 categoryId, 
-												 minRentPrice, 
-												 maxRentPrice, 
-												 minFullPrice, 
-												 maxFullPrice, 
-												 startLatitude, 
-												 startLongitude, 
-												 endLatitude, 
-												 endLongitude, 
-												 limit, 
+			=> await _productService.GetProducts(searchString,
+												 categoryId,
+												 minRentPrice,
+												 maxRentPrice,
+												 minFullPrice,
+												 maxFullPrice,
+												 startLatitude,
+												 startLongitude,
+												 endLatitude,
+												 endLongitude,
+												 limit,
 												 offset);
-		
+
 
 		/// <summary>
 		/// Получить список отзывов по идентификатору учётной еденицы
@@ -64,7 +61,7 @@ namespace api.deli.ru.Controllers
 		/// <returns>Список отзывов учётной еденицы</returns>
 		[HttpGet]
 		[ProducesResponseType(typeof(List<Feedback>), StatusCodes.Status200OK)]
-		public ActionResult GetReviews(int qwe, int qweew, [FromQuery]params int[] radius)
+		public ActionResult GetReviews(int qwe, int qweew, [FromQuery] params int[] radius)
 		{
 			return null;
 		}

@@ -1,6 +1,6 @@
 ﻿namespace data.deli.ru.Models
 {
-    public class Feedback : IBsonObject, IDateObject
+	public class Feedback : IBsonObject, IDateObject
 	{
 		public BsonObjectId Id { get; set; }
 		public DateTime DateCreated { get; set; }

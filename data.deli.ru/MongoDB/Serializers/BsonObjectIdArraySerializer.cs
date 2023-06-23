@@ -6,7 +6,7 @@ using BsonObjectId = data.deli.ru.MongoDB.Types.BsonObjectId;
 
 namespace data.deli.ru.MongoDB.Serializers
 {
-    public class BsonObjectIdArraySerializer : SerializerBase<BsonObjectId[]>
+	public class BsonObjectIdArraySerializer : SerializerBase<BsonObjectId[]>
 	{
 		public override BsonObjectId[] Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
 		{

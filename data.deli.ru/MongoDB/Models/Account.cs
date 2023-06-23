@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace data.deli.ru.MongoDB.Models
+﻿namespace data.deli.ru.MongoDB.Models
 {
 	public class Account : IBsonObject, IDateObject
 	{
 		public BsonObjectId Id { get; set; }
 		public DateTime DateCreated { get; set; }
 		public DateTime DateModify { get; set; }
+		public string UserName { get; set; }
 		public bool IsLogined { get; set; }
 		public string Password { get; set; }
 		public string OldPassword { get; set; }

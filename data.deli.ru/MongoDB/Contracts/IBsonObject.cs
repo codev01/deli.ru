@@ -1,6 +1,6 @@
 ﻿namespace data.deli.ru.MongoDB.Contracts
 {
-    public interface IBsonObject
+	public interface IBsonObject
 	{
 		BsonObjectId Id { get; set; }
 	}

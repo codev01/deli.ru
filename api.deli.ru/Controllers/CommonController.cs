@@ -9,12 +9,12 @@ namespace api.deli.ru.Controllers
 	[Route("[controller].[action]")]
 	public class CommonController : Controller, ICityService
 	{
-        private ICityService _cityService;
+		private ICityService _cityService;
 
 		public CommonController(ICityService cityService)
-        {
-            _cityService = cityService;
-        }
+		{
+			_cityService = cityService;
+		}
 
 		[HttpGet]
 		public Task<IEnumerable<City>> SearchCities(string searchString, int limit = 100, int offset = 0)

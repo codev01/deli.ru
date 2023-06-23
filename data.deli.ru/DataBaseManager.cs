@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using data.deli.ru.MongoDB;
-using data.deli.ru.MongoDB.Bases;
+﻿using data.deli.ru.MongoDB;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,11 +11,11 @@ namespace data.deli.ru
 		public PrivateManager Private { get; }
 		public OtherDatabase OtherDatabase { get; }
 
-        public DataBaseManager(DatabaseConnections databaseConnections, IServiceCollection services)
-        {
+		public DataBaseManager(DatabaseConnections databaseConnections, IServiceCollection services)
+		{
 			Main = new MainManager(databaseConnections.Main, services);
 			Common = new CommonManager(databaseConnections.Common, services);
 			Private = new PrivateManager(databaseConnections.Private, services);
 		}
-    }
+	}
 }

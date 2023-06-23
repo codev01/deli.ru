@@ -11,7 +11,7 @@ namespace api.deli.ru.Services.Contracts
 		string GenerateToken(ClaimsIdentity identity);
 		ClaimsIdentity GetAppIdentity(App app);
 		ClaimsIdentity GetUserIdentity(Account account);
-		ClaimsPrincipal ValidateToken(string token, TokenValidationParameters validationParameters);
+		Task<ClaimsPrincipal> ValidateToken(string token, TokenValidationParameters validationParameters);
 		TokenValidationParameters GetTokenValidationParameters();
 	}
 }

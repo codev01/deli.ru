@@ -1,6 +1,6 @@
 namespace data.deli.ru.Models
 {
-    public enum CategoryType
+	public enum CategoryType
 	{
 		Low,
 		High

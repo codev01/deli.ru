@@ -1,8 +1,6 @@
-﻿using api.deli.ru.Services;
-
-namespace api.deli.ru.ConfigModels
+﻿namespace api.deli.ru.ConfigModels
 {
-    public class ApiConfigurations
+	public class ApiConfigurations
 	{
 		public DatabaseConnections DatabaseConnections { get; set; }
 		public Swagger Swagger { get; set; }

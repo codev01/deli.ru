@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Runtime.Intrinsics.Arm;
+﻿using System.Linq.Expressions;
 
 using MongoDB.Bson;
-using MongoDB.Driver;
 
 namespace data.deli.ru.MongoDB
 {
@@ -54,10 +46,10 @@ namespace data.deli.ru.MongoDB
 		protected void CleareExpression()
 			=> Expression = string.Empty;
 
-		protected void OpenExpression() 
+		protected void OpenExpression()
 			=> AddExpression("{");
 
-		protected void CloseExpression() 
+		protected void CloseExpression()
 			=> AddExpression("}");
 
 		protected void OpenArray()
@@ -71,13 +63,13 @@ namespace data.deli.ru.MongoDB
 	{
 		public MongoExpressionManager(MongoExpression expression)
 			=> Add(expression);
-        public MongoExpressionManager(params MongoExpression[] expressions)
+		public MongoExpressionManager(params MongoExpression[] expressions)
 			=> Add(expressions);
 
 		public void And(params MongoExpression[] expressions)
 			=> _addOperator(AND, expressions);
 
-		public void Or(params MongoExpression[] expressions) 
+		public void Or(params MongoExpression[] expressions)
 			=> _addOperator(OR, expressions);
 
 		private void _addOperator(string operatorName, params MongoExpression[] expressions)
@@ -125,14 +117,14 @@ namespace data.deli.ru.MongoDB
 
 		public static string GetFieldName<T, TValue>(Expression<Func<T, TValue>> memberAccess) =>
 			((MemberExpression)memberAccess.Body).Member.Name;
-			//var fieldName = GetFieldName((MyClass c) => c.Field);
-			//var propertyName = GetFieldName((MyClass c) => c.Property);
+		//var fieldName = GetFieldName((MyClass c) => c.Field);
+		//var propertyName = GetFieldName((MyClass c) => c.Property);
 	}
 
 	internal class MongoExpression : MongoHelper
 	{
-        public MongoExpression(string fieldName, params MongoParameter[] parameters)
-        {
+		public MongoExpression(string fieldName, params MongoParameter[] parameters)
+		{
 			_addFieldName(fieldName);
 			OpenExpression();
 			foreach (MongoParameter parameter in parameters)
@@ -143,13 +135,13 @@ namespace data.deli.ru.MongoDB
 			CloseExpression();
 		}
 
-        public MongoExpression(string fieldName, MongoParameter parameter)
+		public MongoExpression(string fieldName, MongoParameter parameter)
 		{
 			_addFieldName(fieldName);
 			AddExpression(parameter.Value.ToString());
 		}
 
-		private void _addFieldName(string fieldName) 
+		private void _addFieldName(string fieldName)
 			=> AddExpression($"\"{fieldName}\":");
 	}
 
@@ -157,11 +149,11 @@ namespace data.deli.ru.MongoDB
 	{
 		public string Name { get; }
 		public object Value { get; }
-        public MongoParameter(string name, object value)
-        {
-            Name = name;
+		public MongoParameter(string name, object value)
+		{
+			Name = name;
 			Value = value;
-        }
+		}
 
 		public static MongoParameter Gte(int value)
 			=> Parameter(GTE, value);
@@ -198,7 +190,7 @@ namespace data.deli.ru.MongoDB
 			=> $"\"{value}\"";
 
 		public static string ValidFormater(object value)
-		{	
+		{
 			string valueStr = value.ToString();
 			string typeName = value.GetType().Name;
 			switch (typeName)
@@ -216,5 +208,5 @@ namespace data.deli.ru.MongoDB
 			}
 			return valueStr;
 		}
-    }
+	}
 }
