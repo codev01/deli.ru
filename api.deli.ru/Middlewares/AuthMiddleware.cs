@@ -28,10 +28,13 @@ namespace api.deli.ru.Middlewares
 				Endpoint endpoint = context.GetEndpoint();
 				string token = string.Empty;
 
-				if (endpoint is not null && endpoint.Metadata.GetMetadata<AllowAnonymousAttribute>() is null)
+				if (endpoint is not null && 
+					endpoint.Metadata.GetMetadata<AllowAnonymousAttribute>() is null && 
+					endpoint.Metadata.GetMetadata<AuthAttribute>() is not null &&
+					!context.User.IsInRole(Roles.Guest))
 				{
 					if (context.User.Identity.IsAuthenticated)
-					{
+					{						
 						var appIdClaim = context.User.Claims.FirstOrDefault(claim => claim.Type == JWTClaimTypes.AppId);
 						var accountIdClaim = context.User.Claims.FirstOrDefault(claim => claim.Type == JWTClaimTypes.UserName);
 						var app = (await _appService.GetById(appIdClaim.Value)).FirstOrDefault();
@@ -43,7 +46,7 @@ namespace api.deli.ru.Middlewares
 							throw new Exception("User does not exist");
 
 						// проверяем актуальный ли токен
-						// был ли изменён пароль или такого пользователя больше не существует
+						// был ли изменён пароль
 						if (!account.IsLogined)
 						{
 							context.Response.StatusCode = StatusCodes.Status401Unauthorized;

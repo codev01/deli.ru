@@ -31,7 +31,7 @@ namespace api.deli.ru.Controllers
 		[HttpGet]
 		public async Task<IEnumerable<Product>> GetProducts([FromQuery] BsonObjectId announcementId,
 															[FromQuery] PriceMaxMin price,
-															Durations durations,
+															[FromQuery] Durations durations,
 															[FromQuery] Constraint constraint) => 
 			await _productService.GetProducts(announcementId, price, durations, constraint);
 
