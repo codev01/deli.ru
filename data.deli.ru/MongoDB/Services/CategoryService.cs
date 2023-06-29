@@ -7,9 +7,10 @@ namespace data.deli.ru.MongoDB.Services
 {
 	public class CategoryService : MongoServiceBase<Category>, ICategoryService
 	{
-		public CategoryService(DataBaseManager dataBaseManager) : base(dataBaseManager.Main, "categories") { }
+		public CategoryService(DataBaseManager dataBaseManager) : base(dataBaseManager.Common, "categories") { }
 
-		public async Task<IEnumerable<Category>> GetCategories()
-			=> await Collection.Find(_ => true).ToListAsync();
+		public async Task<IEnumerable<Category>> GetCategories() => await Collection
+			.Find(_ => true)
+			.ToListAsync();
 	}
 }

@@ -9,7 +9,7 @@ namespace api.deli.ru.Controllers
 	[ApiController]
 	[Route("[controller].[action]")]
 	[Auth(Roles = Roles.All, Scopes = AppScopes.Categories)]
-	public class CategoryController : Controller, ICategoryService
+	public class CategoryController : Controller
 	{
 		private readonly ICategoryService _categoryService;
 		public CategoryController(ICategoryService categoryService)
@@ -22,7 +22,6 @@ namespace api.deli.ru.Controllers
 		}
 
 		[HttpGet]
-		//[Auth(Roles = Roles.All, Scopes = AppScopes.All)]
 		public async Task<IEnumerable<Category>> GetCategories()
 		{
 			return await _categoryService.GetCategories();

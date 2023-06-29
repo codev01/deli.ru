@@ -1,16 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using data.deli.ru.Common;
-using data.deli.ru.MongoDB.Services.Contracts;
-using data.deli.ru.Types;
+using api.deli.ru.Constants;
 
+using data.deli.ru.MongoDB.Services.Contracts;
+using data.deli.ru.MongoDB.Types;
+using data.deli.ru.Parameters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.deli.ru.Controllers
 {
-	[ApiController]
+    [ApiController]
 	[Route("[controller].[action]")]
-	public class ProductController : Controller, IProductService
+	[Auth(Roles = Roles.All, Scopes = AppScopes.Products)]
+	public class ProductController : Controller
 	{
 		//private readonly IFileService _fileService;
 
@@ -27,30 +29,11 @@ namespace api.deli.ru.Controllers
 			=> _productService.GetById(ids);
 
 		[HttpGet]
-		public async Task<IEnumerable<Product>> GetProducts([Required] string searchString,
-																	   string categoryId,
-																	   double minRentPrice = DefaultParams.MIN_PRICE,
-																	   double maxRentPrice = DefaultParams.MAX_PRICE,
-																	   double minFullPrice = DefaultParams.MIN_PRICE,
-																	   double maxFullPrice = DefaultParams.MAX_PRICE,
-																	   double startLatitude = Location.MIN_LATITUBE,
-																	   double startLongitude = Location.MIN_LONGITUBE,
-																	   double endLatitude = Location.MAX_LATITUBE,
-																	   double endLongitude = Location.MAX_LONGITUBE,
-																	   uint limit = DefaultParams.LARGE_LIMIT,
-																	   uint offset = DefaultParams.OFFSET_DEFAULT)
-			=> await _productService.GetProducts(searchString,
-												 categoryId,
-												 minRentPrice,
-												 maxRentPrice,
-												 minFullPrice,
-												 maxFullPrice,
-												 startLatitude,
-												 startLongitude,
-												 endLatitude,
-												 endLongitude,
-												 limit,
-												 offset);
+		public async Task<IEnumerable<Product>> GetProducts([FromQuery] BsonObjectId announcementId,
+															[FromQuery] PriceMaxMin price,
+															Durations durations,
+															[FromQuery] Constraint constraint) => 
+			await _productService.GetProducts(announcementId, price, durations, constraint);
 
 
 		/// <summary>

@@ -44,10 +44,11 @@ namespace api.deli.ru.Handlers
 				if (context.Request.Headers.TryGetValue(Headers.TokenHeaderName, out var headerValue))
 				{
 					if (string.IsNullOrEmpty(headerValue))
-						throw new Exception($"Not header \"{Headers.TokenHeaderName}\"");
+						throw new Exception($"\"{Headers.TokenHeaderName}\": null or empty");
+					else
+						token = headerValue;
 
-					token = headerValue;
-					context.Request.Headers[Headers.TokenHeaderName] = "Bearer " + token;
+					context.Request.Headers[Headers.TokenHeaderName] = $"{Scheme.Name} {token}";
 
 					// проверяем токен
 					var claimsPrincipal = await _authService.ValidateToken(token, _authService.GetTokenValidationParameters());
@@ -56,9 +57,7 @@ namespace api.deli.ru.Handlers
 					return AuthenticateResult.Success(ticket);
 				}
 				else
-				{
 					throw new Exception($"Not header \"{Headers.TokenHeaderName}\"");
-				}
 			}
 			catch (Exception e)
 			{

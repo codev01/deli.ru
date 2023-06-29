@@ -21,7 +21,7 @@ namespace api.deli.ru.Handlers
 			catch (Exception e)
 			{
 				// тут нужно добавить запись в лог ...
-				//Logger.Error(e, context.Request.Path.Value);
+				//Logger.Error(e, context.Request.Path.StringId);
 
 				context.Response.ContentType = "application/json";
 

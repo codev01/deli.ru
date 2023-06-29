@@ -6,13 +6,13 @@ namespace data.deli.ru.MongoDB.Types
 	{
 		public const string Empty = "000000000000000000000000";
 
-		public string Value { get; }
+		public string StringId { get; }
 
 		public BsonObjectId()
-			=> Value = Empty;
+			=> StringId = Empty;
 
 		public BsonObjectId(string value)
-			=> Value = value;
+			=> StringId = value;
 
 		public static BsonObjectId Create(string value)
 			=> new BsonObjectId(value);
@@ -21,7 +21,7 @@ namespace data.deli.ru.MongoDB.Types
 			=> new BsonObjectId(objectId.ToString());
 
 		public static implicit operator ObjectId(BsonObjectId myObjectId)
-			=> ObjectId.Parse(myObjectId.Value);
+			=> ObjectId.Parse(myObjectId.StringId);
 
 		public static BsonObjectId[] ConvertStrArray(string[] values)
 			=> Array.ConvertAll(values, x => new BsonObjectId(x));

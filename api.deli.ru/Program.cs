@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 
 using api.deli.ru.Constants;
 using api.deli.ru.Handlers;
@@ -16,6 +17,8 @@ using Microsoft.OpenApi.Models;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 
+using Newtonsoft.Json.Converters;
+
 namespace api.deli.ru
 {
 	public class Program
@@ -29,6 +32,7 @@ namespace api.deli.ru
 			// регистрация кастомного атрибута представляющий ObjectId в строковом представлении
 			BsonSerializer.RegisterSerializer(new BsonObjectIdSerializer());
 			BsonSerializer.RegisterSerializer(new BsonObjectIdArraySerializer());
+			BsonSerializer.RegisterSerializer(new BsonDurationsSerializer());
 			#endregion
 
 			// build web app
@@ -47,18 +51,12 @@ namespace api.deli.ru
 			}).AddScheme<DefaultSchemeOptions, DefaultSchemeHandler>(JwtBearerDefaults.AuthenticationScheme,
 			options => { });
 
-			// Конфигурация авторизации по ролям
 			services.AddAuthorization(options =>
 			{
-				options.AddPolicy("tenant", policy =>
+				options.AddPolicy(Policies.TenantAndLandlord, policy =>
 				{
 					policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
-					policy.RequireRole("tenant", "landlord");
-				});
-				options.AddPolicy("landlord", policy =>
-				{
-					policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
-					policy.RequireRole("landlord");
+					policy.RequireRole(Roles.Tenant, Roles.Landlord);
 				});
 			});
 
@@ -122,11 +120,18 @@ namespace api.deli.ru
 			services.AddControllers()
 				.AddJsonOptions(options =>
 				{
+					// палитика имён свойств
+					options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 					// игнорирование свойств со значением null
 					options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
 					// игнорирование свойств со значением по умолчанию
 					options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault;
+					// сериализаторы BsonObjectId
+					options.JsonSerializerOptions.Converters.Add(new JsonObjectIdSerializer());
+					options.JsonSerializerOptions.Converters.Add(new JsonObjectIdArraySerializer());
+					options.JsonSerializerOptions.Converters.Add(new JsonDurationsSerializer());
 				});
+
 
 			services.AddEndpointsApiExplorer();
 			services.AddSwaggerGen();
@@ -201,8 +206,8 @@ namespace api.deli.ru
 			});
 
 			// подключаем CORS
-			// AllowAnyOrigin() ->  указываем, что приложение может обрабатывать запросы от приложений по любым адресам.
-			app.UseCors(builder => builder.AllowAnyOrigin());
+			// AllowAnyOrigin() -> указываем, что приложение может обрабатывать запросы из любых источников.
+			app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 			app.Map("/", () => Results.Redirect("/swagger"));
 			app.UseSwagger();

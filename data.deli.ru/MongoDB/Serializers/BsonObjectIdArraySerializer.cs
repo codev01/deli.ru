@@ -20,7 +20,7 @@ namespace data.deli.ru.MongoDB.Serializers
 			context.Writer.WriteStartArray();
 			foreach (var bsonObjectId in value)
 			{
-				context.Writer.WriteObjectId(new ObjectId(bsonObjectId.Value));
+				context.Writer.WriteObjectId(new ObjectId(bsonObjectId.StringId));
 			}
 			context.Writer.WriteEndArray();
 		}

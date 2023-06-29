@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
+using api.deli.ru.Constants;
 using api.deli.ru.Services.Contracts;
 
 using data.deli.ru.MongoDB.Models;
@@ -28,39 +29,62 @@ namespace api.deli.ru.Controllers
 			_accountService = accountService;
 		}
 
-		[HttpPost]
+		[HttpGet]
 		public async Task<IActionResult> Registration(/*...*/)
 		{
 			throw new NotImplementedException();
 		}
 
 		[HttpGet]
-		[AllowAnonymous]
-		public async Task<IActionResult> Login([Required] string app_id,
-											   [Required] string client_secret,
-											   [Required] string user_name,
-											   [Required] string password)
+		[Auth(Roles = Roles.Guest)]
+		public async Task<IActionResult> UserLogin([Required] string user_name,
+												   [Required] string password)
 		{
 			try
 			{
-				App app = (await _appService.GetById(app_id)).FirstOrDefault();
 				Account account = (await _accountService.GetAccount(user_name));
-				if (app is null)
-					return BadRequest("Application does not exist");
 				if (account is null)
 					return BadRequest("User does not exist");
-				var claims = _authService.GetAppIdentity(app).Claims.Union(_authService.GetUserIdentity(account).Claims);
+				if (account.Password != password)
+					return Unauthorized("Incorrect password");
+
+				var claims = _authService.GetUserIdentity(account).Claims;
 				var identity = new ClaimsIdentity(claims);
 
 				string token = _authService.GenerateToken(identity);
 
-				// тут надо проверить был ли изменён у пользователя пароль до авторизации по полю "isLogined"
+				// был ли изменён у пользователя пароль до авторизации по полю "isLogined"
 				if (!account.IsLogined)
 				{
 					// изменяем флаг в аккаунте в БД на true
+					_accountService.UdateField(account.Id, a => a.IsLogined, true);
 				}
 
 				return Ok(new { user_name = user_name, token = token });
+			}
+			catch (Exception e)
+			{
+				return Unauthorized(new { errorText = e.Message });
+			}
+		}
+
+		[HttpGet]
+		[AllowAnonymous]
+		public async Task<IActionResult> AppLogin([Required] string appId,
+												  [Required] string clientSecret){
+			try
+			{
+				App app = (await _appService.GetById(appId)).FirstOrDefault();
+				if (app is null)
+					return BadRequest("Application does not exist");
+				if (app.ClientSecret != clientSecret)
+					return Unauthorized("Incorrect secret");
+
+				var claims = _authService.GetAppIdentity(app).Claims;
+				var identity = new ClaimsIdentity(claims);
+				string token = _authService.GenerateToken(identity);
+
+				return Ok(new { appToken = token });
 			}
 			catch (Exception e)
 			{

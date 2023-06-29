@@ -19,7 +19,7 @@ namespace api.deli.ru.Filters
 			}
 			if (context.Result is ObjectResult objectResult)
 			{
-				//objectResult.Value = new ApiResult { Common = objectResult.Value };
+				//objectResult.StringId = new ApiResult { Common = objectResult.StringId };
 			}
 		}
 

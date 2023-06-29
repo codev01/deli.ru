@@ -12,6 +12,6 @@ namespace data.deli.ru.MongoDB.Serializers
 			=> new BsonObjectId(context.Reader.ReadObjectId().ToString());
 
 		public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, BsonObjectId value)
-			=> context.Writer.WriteObjectId(ObjectId.Parse(value.Value));
+			=> context.Writer.WriteObjectId(ObjectId.Parse(value.StringId));
 	}
 }

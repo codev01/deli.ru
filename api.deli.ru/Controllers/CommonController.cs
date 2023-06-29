@@ -1,4 +1,6 @@
-﻿using data.deli.ru.MongoDB.Models;
+﻿using api.deli.ru.Constants;
+
+using data.deli.ru.MongoDB.Models;
 using data.deli.ru.MongoDB.Services.Contracts;
 
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +9,8 @@ namespace api.deli.ru.Controllers
 {
 	[ApiController]
 	[Route("[controller].[action]")]
-	public class CommonController : Controller, ICityService
+	[Auth(Roles = Roles.All, Scopes = AppScopes.All)]
+	public class CommonController : Controller
 	{
 		private ICityService _cityService;
 

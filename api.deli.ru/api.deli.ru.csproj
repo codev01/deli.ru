@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Responces\" />
+    <Folder Include="Parameters\" />
   </ItemGroup>
 
   <ItemGroup>
