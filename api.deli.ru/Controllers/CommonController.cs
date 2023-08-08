@@ -9,7 +9,7 @@ namespace api.deli.ru.Controllers
 {
 	[ApiController]
 	[Route("[controller].[action]")]
-	[Auth(Roles = Roles.All, Scopes = AppScopes.All)]
+	[Auth(Roles = Roles.All, Scopes = Scopes.All)]
 	public class CommonController : Controller
 	{
 		private ICityService _cityService;

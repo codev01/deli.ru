@@ -21,7 +21,7 @@ namespace data.deli.ru.MongoDB.Serializers
 		public override void Write(Utf8JsonWriter writer, Durations value, JsonSerializerOptions options)
 		{
 			writer.WriteStartObject();
-			writer.WritePropertyName(nameof(Durations.Hours));
+			writer.WritePropertyName("hours");
 			writer.WriteStartArray();
 			foreach (var item in value.Hours)
 				writer.WriteNumberValue(item);

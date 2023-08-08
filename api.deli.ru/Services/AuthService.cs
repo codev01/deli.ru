@@ -64,8 +64,8 @@ namespace api.deli.ru.Services
 				var claims = new List<Claim>
 				{
 					new Claim(JWTClaimTypes.AppId, app.Id.StringId),
-					new Claim(JWTClaimTypes.AppVersion, app.Version.ToString()),
-					new Claim(ClaimTypes.Role, Roles.Guest)
+					new Claim(ClaimTypes.Role, Roles.Guest),
+					new Claim(JWTClaimTypes.AppVersion, app.Version.ToString())
 				};
 				foreach (var scope in app.Scopes)
 					claims.Add(new Claim(JWTClaimTypes.Scope, scope));

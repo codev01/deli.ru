@@ -28,15 +28,17 @@ namespace api.deli.ru.Middlewares
 				Endpoint endpoint = context.GetEndpoint();
 				string token = string.Empty;
 
-				if (endpoint is not null && 
-					endpoint.Metadata.GetMetadata<AllowAnonymousAttribute>() is null && 
+				if (endpoint is not null &&
+					endpoint.Metadata.GetMetadata<AllowAnonymousAttribute>() is null &&
 					endpoint.Metadata.GetMetadata<AuthAttribute>() is not null &&
+					// если это гость
 					!context.User.IsInRole(Roles.Guest))
 				{
 					if (context.User.Identity.IsAuthenticated)
-					{						
+					{
 						var appIdClaim = context.User.Claims.FirstOrDefault(claim => claim.Type == JWTClaimTypes.AppId);
 						var accountIdClaim = context.User.Claims.FirstOrDefault(claim => claim.Type == JWTClaimTypes.UserName);
+
 						var app = (await _appService.GetById(appIdClaim.Value)).FirstOrDefault();
 						var account = (await _accountService.GetAccount(accountIdClaim.Value));
 
@@ -56,7 +58,7 @@ namespace api.deli.ru.Middlewares
 
 						var authAttribute = endpoint.Metadata.GetMetadata<AuthAttribute>();
 
-						if (authAttribute is not null && !string.IsNullOrEmpty(authAttribute.Scopes))
+						if (authAttribute is not null && !string.IsNullOrEmpty(authAttribute.Scopes) && authAttribute.Scopes != Scopes.All)
 						{
 							string[] attributeScopes = authAttribute.Scopes.Split(',', StringSplitOptions.RemoveEmptyEntries & StringSplitOptions.TrimEntries);
 
@@ -66,7 +68,10 @@ namespace api.deli.ru.Middlewares
 								if (Array.Exists(app.Scopes, s => s == scope))
 									isMatched = true;
 								else
+								{
 									isMatched = false;
+									break;
+								}
 							}
 							if (!isMatched)
 							{

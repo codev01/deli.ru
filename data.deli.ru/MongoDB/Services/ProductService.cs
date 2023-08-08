@@ -14,15 +14,17 @@ namespace data.deli.ru.MongoDB.Services
 		public ProductService(DataBaseManager dataBaseManager) : base(dataBaseManager.Main, "products") { }
 
 
-		public async Task<IEnumerable<Product>> GetProducts(BsonObjectId announcementId, 
+		public async Task<IEnumerable<Product>> GetProducts(string announcementId, 
 															PriceMaxMin price, 
-															Durations durations, 
+															Duration duration, 
 															Constraint constraint)
 		{
 			MongoExpressionManager expressions = new MongoExpressionManager();
 
 			var builder = Builders<Product>.Filter;
 			var filters = new List<FilterDefinition<Product>>();
+
+			filters.Add(builder.Eq(p => p.AnnouncementId, BsonObjectId.Create(announcementId)));
 
 			#region Price
 			if (price.MinRentPrice > price.MaxRentPrice && price.MinFullPrice > price.MaxFullPrice)
@@ -35,13 +37,12 @@ namespace data.deli.ru.MongoDB.Services
 						builder.Lte(p => p.FullPrice, price.MaxFullPrice));
 			#endregion
 
-
-			if(durations.Hours != Durations.DefaultHours)
-				filters.Add(builder.All(p => p.Durations.Hours, durations.Hours));
+			filters.Add(builder.Gte(p => p.Durations.MinDuration, duration.MinDuration) &
+						builder.Lte(p => p.Durations.MaxDuration, duration.MaxDuration));
 
 			//var projection = Builders<Product>.Projection.Include(p => p.RentPrice)
 			//										       .Include(p => p.Count);
-
+			
 			var result = Collection
 				.Find(builder.Combine(filters))
 				/*.Project<Product>(projection)*/

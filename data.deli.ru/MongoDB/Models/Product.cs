@@ -1,4 +1,6 @@
-﻿using BsonObjectId = data.deli.ru.MongoDB.Types.BsonObjectId;
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+using BsonObjectId = data.deli.ru.MongoDB.Types.BsonObjectId;
 
 namespace data.deli.ru.Models
 {
@@ -12,6 +14,7 @@ namespace data.deli.ru.Models
 		public double RentPrice { get; set; }
 		public double FullPrice { get; set; }
 		public int Count { get; set; }
+		[BsonElement("durations")]
 		public Durations Durations { get; set; }
 		public Image[] Images { get; set; }
 	}

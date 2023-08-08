@@ -40,6 +40,9 @@ namespace api.deli.ru.Handlers
 
 			try
 			{
+#if DEBUG_AUTHDISABLE
+				context.Request.Headers[Headers.TokenHeaderName] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImNvZGV2MDEiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJsYW5kbG9yZCIsImFwcElkIjoiNjQ5MjA0OGZkMTAzOGJmNThjNGEzMGQ2IiwiYXBwVmVyc2lvbiI6IjEiLCJzY29wZSI6WyJjYXRlZ29yaWVzIiwiY2l0aWVzIiwic2VhcmNoIiwidXNlcnMiLCJmZWVkYmFja3MiLCJwcm9kdWN0cyIsImFubm91bmNlbWVudHMiLCJhdXRoIl0sIm5iZiI6MTY4OTM5NTI3MiwiZXhwIjoxNjkxOTg3MjcyLCJpc3MiOiJhdXRoLmRlbGkucnUiLCJhdWQiOlsiYXBpLmRlbGkucnUiLCJhcGkuZGVsaS5ydSJdfQ.XPerBKqehsmlwJJD_9wT9YaZ0vO8fasKqgv4i525IPk";
+#endif
 				// проверяем заголовок
 				if (context.Request.Headers.TryGetValue(Headers.TokenHeaderName, out var headerValue))
 				{

@@ -1,6 +1,6 @@
 ﻿namespace api.deli.ru.Constants
 {
-	public class AppScopes
+	public class Scopes
 	{
 		public const string All = $"{Categories}, {Products}, {Cities}, {Transactions}, {Feedbacks}, {Users}, {Announcements}, {ConfidentionalInfo}, {Serach}";
 		public const string Categories = "categories";
@@ -12,5 +12,6 @@
 		public const string Announcements = "announcements";
 		public const string ConfidentionalInfo = "confidentional_info";
 		public const string Serach = "search";
+		public const string Auth = "auth";
 	}
 }

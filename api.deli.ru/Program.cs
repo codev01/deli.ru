@@ -32,7 +32,7 @@ namespace api.deli.ru
 			// регистрация кастомного атрибута представляющий ObjectId в строковом представлении
 			BsonSerializer.RegisterSerializer(new BsonObjectIdSerializer());
 			BsonSerializer.RegisterSerializer(new BsonObjectIdArraySerializer());
-			BsonSerializer.RegisterSerializer(new BsonDurationsSerializer());
+			//BsonSerializer.RegisterSerializer(new BsonDurationsSerializer());
 			#endregion
 
 			// build web app
@@ -43,98 +43,6 @@ namespace api.deli.ru
 			// выставляем возможные стороки для обращения к api
 			builder.WebHost.UseUrls(Properties.ApiConfigurations.UseUrls);
 #endif
-			services.AddAuthentication(options =>
-			{
-				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-				options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-			}).AddScheme<DefaultSchemeOptions, DefaultSchemeHandler>(JwtBearerDefaults.AuthenticationScheme,
-			options => { });
-
-			services.AddAuthorization(options =>
-			{
-				options.AddPolicy(Policies.TenantAndLandlord, policy =>
-				{
-					policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
-					policy.RequireRole(Roles.Tenant, Roles.Landlord);
-				});
-			});
-
-			#region Swagger Configuration
-			services.AddSwaggerGen(swagger =>
-			{
-				//This is to generate the Default UI of Swagger Documentation
-				swagger.SwaggerDoc("v1", new OpenApiInfo
-				{
-					Title = "deli.ru",
-					Description = "WWS"
-				});
-
-				var securityScheme = new OpenApiSecurityScheme()
-				{
-					Name = Headers.TokenHeaderName,
-					Type = SecuritySchemeType.ApiKey,
-					Scheme = JwtBearerDefaults.AuthenticationScheme,
-					BearerFormat = "JWT",
-					In = ParameterLocation.Header,
-					Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter your token",
-				};
-
-				// To Enable authorization using Swagger (JWT)
-				swagger.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
-				swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
-				{
-					{
-						new OpenApiSecurityScheme
-						{
-							Reference = new OpenApiReference
-							{
-								Type = ReferenceType.SecurityScheme,
-								Id = JwtBearerDefaults.AuthenticationScheme
-							}
-						},
-						new string[] { }
-					}
-				});
-
-				// Интеграция XML-комментариев с Swagger
-				var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-				var xmlCommentsPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
-				swagger.IncludeXmlComments(xmlCommentsPath);
-
-				// Добавление фильтра операции для автоматического добавления заголовка Authorization
-				//swagger.OperationFilter<SwaggerAuthorizationHeaderFilter>();
-			});
-			#endregion
-
-			// CORS
-			services.AddCors();
-
-			// Add services to the container.
-			//services.AddControllers(options =>
-			//{
-			//	options.Filters.Add<AuthFilter>();
-			//});
-
-			// Игнорирование свойств при сериализации
-			services.AddControllers()
-				.AddJsonOptions(options =>
-				{
-					// палитика имён свойств
-					options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-					// игнорирование свойств со значением null
-					options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
-					// игнорирование свойств со значением по умолчанию
-					options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault;
-					// сериализаторы BsonObjectId
-					options.JsonSerializerOptions.Converters.Add(new JsonObjectIdSerializer());
-					options.JsonSerializerOptions.Converters.Add(new JsonObjectIdArraySerializer());
-					options.JsonSerializerOptions.Converters.Add(new JsonDurationsSerializer());
-				});
-
-
-			services.AddEndpointsApiExplorer();
-			services.AddSwaggerGen();
 
 			WebApplication app = builder.Build();
 

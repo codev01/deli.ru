@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
-    <Configurations>Debug;Release</Configurations>
+    <Configurations>Debug;Release;Debug_AuthDisable</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

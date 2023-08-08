@@ -2,6 +2,7 @@
 
 using api.deli.ru.Constants;
 
+using data.deli.ru.MongoDB.Models;
 using data.deli.ru.MongoDB.Services.Contracts;
 using data.deli.ru.MongoDB.Types;
 using data.deli.ru.Parameters;
@@ -11,12 +12,12 @@ namespace api.deli.ru.Controllers
 {
     [ApiController]
 	[Route("[controller].[action]")]
-	[Auth(Roles = Roles.All, Scopes = AppScopes.Products)]
+	[Auth(Roles = Roles.All, Scopes = Scopes.Products)]
 	public class ProductController : Controller
 	{
 		//private readonly IFileService _fileService;
 
-		private IProductService _productService { get; }
+		private readonly IProductService _productService;
 
 		public ProductController(/*IFileService fileService*/ IProductService productService)
 		{
@@ -29,12 +30,17 @@ namespace api.deli.ru.Controllers
 			=> _productService.GetById(ids);
 
 		[HttpGet]
-		public async Task<IEnumerable<Product>> GetProducts([FromQuery] BsonObjectId announcementId,
+		public async Task<IEnumerable<Product>> GetProducts([Required] string announcementId,
 															[FromQuery] PriceMaxMin price,
-															[FromQuery] Durations durations,
+															[FromQuery] Duration duration,
 															[FromQuery] Constraint constraint) => 
-			await _productService.GetProducts(announcementId, price, durations, constraint);
+			await _productService.GetProducts(announcementId, price, duration, constraint);
 
+		//[HttpPost]
+		//public async Task<IActionResult> AddProduct(Product product)
+		//{
+
+		//}
 
 		/// <summary>
 		/// Получить список отзывов по идентификатору учётной еденицы

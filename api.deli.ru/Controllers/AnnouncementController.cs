@@ -1,4 +1,6 @@
-﻿using api.deli.ru.Constants;
+﻿using System.ComponentModel.DataAnnotations;
+
+using api.deli.ru.Constants;
 
 using data.deli.ru.MongoDB.Models;
 using data.deli.ru.MongoDB.Services.Contracts;
@@ -10,7 +12,7 @@ namespace api.deli.ru.Controllers
 {
 	[ApiController]
 	[Route("[controller].[action]")]
-	[Auth(Roles = Roles.All, Scopes = AppScopes.Categories)]
+	[Auth(Policy = Policies.TenantAndLandlord, Scopes = Scopes.Announcements)]
 	public class AnnouncementController : Controller
 	{
 		private readonly IAnnouncementService _announcementService;
@@ -22,10 +24,14 @@ namespace api.deli.ru.Controllers
 			=> await _announcementService.GetById(categoryIds);
 
 		[HttpGet]
-		public async Task<IEnumerable<Announcement>> GetPublishedAnnouncements(string searchString,
-																			   string categoryId,
-																			   [FromQuery] Radius radius,
-																			   [FromQuery] Constraint constraint)
-			=> await _announcementService.GetPublishedAnnouncements(searchString, categoryId, radius, constraint);
+		public async Task<IEnumerable<Announcement>> GetAnnouncements([Required] string searchString,
+																	  string categoryId,
+																	  bool? isPublished,
+																	  [FromQuery] Radius radius,
+																	  [FromQuery] Constraint constraint)
+			=> await _announcementService.GetAnnouncements(searchString, categoryId, isPublished, radius, constraint);
+
+		//[HttpPost]
+		//public async Task<IActionResult> AddAnnouncement(Announcement)
 	}
 }

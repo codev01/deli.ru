@@ -5,9 +5,10 @@ namespace data.deli.ru.MongoDB.Services.Contracts
 {
     public interface IAnnouncementService : IMongoServiceBase<Announcement>
 	{
-		Task<IEnumerable<Announcement>> GetPublishedAnnouncements(string searchString,
-																  string categoryId,
-																  Radius radius,
-																  Constraint constraint);
+		Task<IEnumerable<Announcement>> GetAnnouncements(string searchString,
+														 string categoryId,
+														 bool? isPublished,
+														 Radius radius,
+														 Constraint constraint);
 	}
 }

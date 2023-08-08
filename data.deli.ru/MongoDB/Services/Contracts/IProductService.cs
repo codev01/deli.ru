@@ -4,9 +4,9 @@ namespace data.deli.ru.MongoDB.Services.Contracts
 {
     public interface IProductService : IMongoServiceBase<Product>
 	{
-		public Task<IEnumerable<Product>> GetProducts(BsonObjectId announcementId,
+		public Task<IEnumerable<Product>> GetProducts(string announcementId,
 													  PriceMaxMin price,
-													  Durations durations,
+													  Duration duration,
 													  Constraint constraint);
 	}
 }

@@ -12,12 +12,17 @@ namespace data.deli.ru.MongoDB.Services
 {
     public class AnnouncementService : MongoServiceBase<Announcement>, IAnnouncementService
 	{
-		public AnnouncementService(DataBaseManager dataBaseManager) : base(dataBaseManager.Main, "announcements") { }
+		private readonly IProductService _productService;
+		public AnnouncementService(DataBaseManager dataBaseManager, IProductService productService) : base(dataBaseManager.Main, "announcements") 
+		{
+			_productService = productService;
+		}
 
-		public async Task<IEnumerable<Announcement>> GetPublishedAnnouncements(string searchString,
-																			   string categoryId,
-																			   Radius radius,
-																			   Constraint constraint){
+		public async Task<IEnumerable<Announcement>> GetAnnouncements(string searchString,
+																	  string categoryId,
+																	  bool? isPublished,
+																	  Radius radius,
+																	  Constraint constraint){
 			var builder = Builders<Announcement>.Filter;
 			var filters = new List<FilterDefinition<Announcement>>();
 
@@ -53,20 +58,28 @@ namespace data.deli.ru.MongoDB.Services
 			filters.Add(builder.Lte(p => p.Location.Longitude, radius.EndLongitude));
 			#endregion
 
-			filters.Add(builder.Eq(a => a.IsPublished, true));
+			if(isPublished is not null)
+				filters.Add(builder.Eq(a => a.IsPublished, isPublished));
 
 			//var projection = Builders<Announcement>.Projection
 			//	.Include(a => a.Id)
 			//	.Include(a => a.Name)
 			//	.Include(a => a.Location);
 
-			var result = Collection
+			var result = await Collection
 				.Find(builder.Combine(filters))
 				//.Project<Announcement>(projection)
 				.Skip((int)constraint.Offset)
 				.Limit((int)constraint.Limit)
 				.ToListAsync();
-			return await result;
+
+			foreach (Announcement announcement in result)
+			{
+				var products = await _productService.GetProducts(announcement.Id, PriceMaxMin.Default, Duration.Default, constraint);
+				announcement.PreviewProduct = products?.FirstOrDefault();
+			}
+
+			return result;
 		}
 	}
 }

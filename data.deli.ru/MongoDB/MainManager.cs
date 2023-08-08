@@ -19,6 +19,7 @@ namespace data.deli.ru.MongoDB
 		{
 			services.AddSingleton<ICategoryService, CategoryService>();
 			services.AddSingleton<IProductService, ProductService>();
+			services.AddSingleton<IAnnouncementService, AnnouncementService>();
 
 			return services;
 		}

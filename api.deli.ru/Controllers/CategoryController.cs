@@ -8,7 +8,7 @@ namespace api.deli.ru.Controllers
 {
 	[ApiController]
 	[Route("[controller].[action]")]
-	[Auth(Roles = Roles.All, Scopes = AppScopes.Categories)]
+	[Auth(Roles = Roles.All, Scopes = Scopes.Categories)]
 	public class CategoryController : Controller
 	{
 		private readonly ICategoryService _categoryService;

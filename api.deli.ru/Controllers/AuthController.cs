@@ -36,7 +36,7 @@ namespace api.deli.ru.Controllers
 		}
 
 		[HttpGet]
-		[Auth(Roles = Roles.Guest)]
+		[Auth(Roles = Roles.Guest, Scopes = Scopes.Auth)]
 		public async Task<IActionResult> UserLogin([Required] string user_name,
 												   [Required] string password)
 		{
@@ -49,7 +49,14 @@ namespace api.deli.ru.Controllers
 					return Unauthorized("Incorrect password");
 
 				var claims = _authService.GetUserIdentity(account).Claims;
-				var identity = new ClaimsIdentity(claims);
+				var appClaims = User.Claims.ToList();
+				foreach (var claim in appClaims)
+					if(claim.Type == ClaimTypes.Role && claim.Value == Roles.Guest)
+					{
+						appClaims.Remove(claim);
+						break;
+					}
+				var identity = new ClaimsIdentity(claims.Union(appClaims));
 
 				string token = _authService.GenerateToken(identity);
 
