@@ -10,6 +10,7 @@ namespace data.deli.ru.MongoDB.Models
 		public BsonObjectId LandlordId { get; set; }
 		public BsonObjectId CategoryId { get; set; }
 		public bool IsPublished { get; set; }
+		public int Count { get; set; }
 		public string Name { get; set; }
 		public Location Location { get; set; }
 		public ObjectLifeStory LifeStory { get; set; }
