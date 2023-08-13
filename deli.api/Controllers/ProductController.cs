@@ -28,7 +28,7 @@ namespace deli.api.Controllers
 			=> _productService.GetById(ids);
 
 		[HttpPost]
-		public async Task<IActionResult> AddProducts(string announcementId, Product[] products)
+		public async Task<IActionResult> AddProducts([Required] string announcementId, [Required] Product[] products)
 		{
 			await _productService.AddProduct(announcementId, products);
 			return Ok();

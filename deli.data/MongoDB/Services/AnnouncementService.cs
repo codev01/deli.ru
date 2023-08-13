@@ -13,12 +13,10 @@ namespace deli.data.MongoDB.Services
 {
 	public class AnnouncementService : MongoServiceBase<Announcement>, IAnnouncementService
 	{
-		private static IProductService _productService;
+		private static readonly IProductService _productService;
 
 		static AnnouncementService()
-		{
-			_productService = GetService<IProductService>();
-		}
+			=> _productService = GetService<IProductService>();
 
 		public AnnouncementService(DataBaseManager dataBaseManager) : base(dataBaseManager.Main.Announcements) { }
 

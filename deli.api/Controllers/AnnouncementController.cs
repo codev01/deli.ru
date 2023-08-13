@@ -24,7 +24,7 @@ namespace deli.api.Controllers
 			=> await _announcementService.GetById(categoryIds);
 
 		[HttpPost]
-		public async Task<IActionResult> AddAnnouncement(Announcement announcement)
+		public async Task<IActionResult> AddAnnouncement([Required] Announcement announcement)
 		{
 			await _announcementService.AddAnnouncement(announcement);
 			return Ok();

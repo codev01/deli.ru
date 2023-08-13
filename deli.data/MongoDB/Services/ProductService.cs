@@ -10,13 +10,12 @@ namespace deli.data.MongoDB.Services
 {
 	public class ProductService : MongoServiceBase<Product>, IProductService
 	{
-		public IAnnouncementService _announcementService;
-		public ProductService(DataBaseManager dataBaseManager) : base(dataBaseManager.Main.Products) { }
+		private static readonly IAnnouncementService _announcementService;
 
-		//protected override void Initialize()
-		//{
-		//	_announcementService = GetService<IAnnouncementService>();
-		//}
+		static ProductService()
+			=> _announcementService = GetService<IAnnouncementService>();
+
+		public ProductService(DataBaseManager dataBaseManager) : base(dataBaseManager.Main.Products) { }
 
 		public async Task AddProduct(string announcementId, params Product[] products)
 		{

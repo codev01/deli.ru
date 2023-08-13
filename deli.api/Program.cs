@@ -113,10 +113,10 @@ namespace deli.api
 
 			// тут последовательность решает!
 			app.UseRouting();
-			app.UseMiddleware<ExceptionMiddleware>();
 			app.UseAuthentication();
 			app.UseMiddleware<AuthMiddleware>();
 			app.UseAuthorization();
+			app.UseMiddleware<ExceptionMiddleware>();
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
