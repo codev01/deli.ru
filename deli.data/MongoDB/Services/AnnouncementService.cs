@@ -11,14 +11,14 @@ using BsonObjectId = deli.data.MongoDB.Types.BsonObjectId;
 
 namespace deli.data.MongoDB.Services
 {
-	public class AnnouncementService : MongoServiceBase<Announcement>, IAnnouncementService
+	public class AnnouncementService : Mongo_Service_Base<Announcement>, IAnnouncementService
 	{
 		private static readonly IProductService _productService;
 
 		static AnnouncementService()
 			=> _productService = GetService<IProductService>();
 
-		public AnnouncementService(DataBaseManager dataBaseManager) : base(dataBaseManager.Main.Announcements) { }
+		public AnnouncementService(DatabaseManager_ dataBaseManager) : base(dataBaseManager.Main.Announcements) { }
 
 		public async Task AddAnnouncement(Announcement announcement)
 		{

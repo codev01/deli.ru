@@ -3,9 +3,9 @@
 	public class CollectionDependency
 	{
 		public string CollectionName { get; set; }
-		public MongoManager MongoManager { get; set; }
+		public _MongoManager MongoManager { get; set; }
 
-		public CollectionDependency(string collectionName, MongoManager mongoManager)
+		public CollectionDependency(string collectionName, _MongoManager mongoManager)
 		{
 			CollectionName = collectionName;
 			MongoManager = mongoManager;

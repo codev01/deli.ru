@@ -2,7 +2,7 @@
 
 namespace deli.data.Models
 {
-	public class DatabaseConnection : IDataBaseConnection
+	public class DatabaseConnection_ : IDataBaseConnection_
 	{
 		public string DataBaseName { get; set; }
 		public string ConnectionString { get; set; }

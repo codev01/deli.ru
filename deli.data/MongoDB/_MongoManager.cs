@@ -7,14 +7,14 @@ using MongoDB.Driver;
 
 namespace deli.data.MongoDB
 {
-	public abstract class MongoManager : MongoDatabaseBase
+	public abstract class _MongoManager : MongoDatabaseBase
 	{
 		public IMongoDatabase Database { get; }
 		public override IMongoClient Client { get; }
 		public override DatabaseNamespace DatabaseNamespace { get; }
 		public override MongoDatabaseSettings Settings { get; }
 
-		public MongoManager(IDataBaseConnection dataBaseConnection, IServiceCollection services)
+		public _MongoManager(IDataBaseConnection_ dataBaseConnection, IServiceCollection services)
 		{
 			_isInit = true;
 			Client = new MongoClient(dataBaseConnection.ConnectionString);

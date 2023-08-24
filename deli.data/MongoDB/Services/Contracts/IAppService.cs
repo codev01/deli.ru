@@ -2,5 +2,5 @@
 
 namespace deli.data.MongoDB.Services.Contracts
 {
-	public interface IAppService : IMongoServiceBase<App> { }
+	public interface IAppService : IMongo_Service_Base<App> { }
 }

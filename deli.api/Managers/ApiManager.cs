@@ -16,7 +16,7 @@ using Microsoft.OpenApi.Models;
 
 namespace deli.api.Managers
 {
-	public class ApiManager : ServiceBase
+	public class ApiManager : Service_Base
 	{
 		private static ApiManager Current { get; } = new();
 		private static ConfigurationManager ConfigurationManager { get; set; }
@@ -117,7 +117,7 @@ namespace deli.api.Managers
 
 			services.AddSingleton(configs);
 
-			services.AddSingleton<DataBaseManager>(new DataBaseManager(configs.DatabaseConnections, services));
+			services.AddSingleton<DatabaseManager_>(new DatabaseManager_(configs.DatabaseConnections, services));
 
 			services.AddSingleton<IFileService, LocalFileService>();
 

@@ -2,7 +2,7 @@
 
 namespace deli.data.MongoDB.Services.Contracts
 {
-	public interface IAccountService : IMongoServiceBase<Account>
+	public interface IAccountService : IMongo_Service_Base<Account>
 	{
 		Task<Account> GetAccount(string user_name);
 	}

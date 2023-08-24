@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\deli.core\deli.core.csproj" />
+    <ProjectReference Include="..\deli.runtime\deli.runtime.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 ﻿namespace deli.data.MongoDB.Services.Contracts
 {
-	public interface ICategoryService : IMongoServiceBase<Category>
+	public interface ICategoryService : IMongo_Service_Base<Category>
 	{
 		Task<IEnumerable<Category>> GetCategories();
 	}

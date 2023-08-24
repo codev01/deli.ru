@@ -2,7 +2,7 @@
 
 namespace deli.core.Bases
 {
-	public abstract class ServiceBase
+	public abstract class Service_Base
 	{
 		private static IServiceProvider ServiceProvider { get; set; }
 		private static IServiceCollection Services { get; set; }

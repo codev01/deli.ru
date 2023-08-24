@@ -13,7 +13,7 @@ using MongoDB.Bson.Serialization.Conventions;
 
 namespace deli.api
 {
-	public class Program
+	public class _Program
 	{
 		public static void Main(string[] args)
 		{

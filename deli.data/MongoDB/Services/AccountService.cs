@@ -6,9 +6,9 @@ using MongoDB.Driver;
 
 namespace deli.data.MongoDB.Services
 {
-	public class AccountService : MongoServiceBase<Account>, IAccountService
+	public class AccountService : Mongo_Service_Base<Account>, IAccountService
 	{
-		public AccountService(DataBaseManager dataBaseManager) : base(dataBaseManager.Private.Accounts) { }
+		public AccountService(DatabaseManager_ dataBaseManager) : base(dataBaseManager.Private.Accounts) { }
 
 		public async Task<Account> GetAccount(string user_name) => await Collection
 			.Find(a => a.UserName == user_name)

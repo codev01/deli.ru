@@ -10,13 +10,13 @@ using BsonObjectId = deli.data.MongoDB.Types.BsonObjectId;
 
 namespace deli.data.Bases
 {
-	public abstract class MongoServiceBase<T> : ServiceBase, IMongoServiceBase<T>
+	public abstract class Mongo_Service_Base<T> : Service_Base, IMongo_Service_Base<T>
 		where T : IBsonObject
 	{
-		protected MongoManager MongoManager { get; }
+		protected _MongoManager MongoManager { get; }
 		protected IMongoCollection<T> Collection { get; }
 
-		public MongoServiceBase(CollectionDependency collection)
+		public Mongo_Service_Base(CollectionDependency collection)
 		{
 			MongoManager = collection.MongoManager;
 			Collection = collection.MongoManager.GetCollection<T>(collection.CollectionName);

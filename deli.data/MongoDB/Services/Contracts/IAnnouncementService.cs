@@ -2,7 +2,7 @@
 
 namespace deli.data.MongoDB.Services.Contracts
 {
-	public interface IAnnouncementService : IMongoServiceBase<Announcement>
+	public interface IAnnouncementService : IMongo_Service_Base<Announcement>
 	{
 		Task AddAnnouncement(Announcement announcement);
 		Task<IEnumerable<Announcement>> GetAnnouncements(string searchString,

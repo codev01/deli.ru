@@ -8,14 +8,14 @@ using BsonObjectId = deli.data.MongoDB.Types.BsonObjectId;
 
 namespace deli.data.MongoDB.Services
 {
-	public class ProductService : MongoServiceBase<Product>, IProductService
+	public class ProductService : Mongo_Service_Base<Product>, IProductService
 	{
 		private static readonly IAnnouncementService _announcementService;
 
 		static ProductService()
 			=> _announcementService = GetService<IAnnouncementService>();
 
-		public ProductService(DataBaseManager dataBaseManager) : base(dataBaseManager.Main.Products) { }
+		public ProductService(DatabaseManager_ dataBaseManager) : base(dataBaseManager.Main.Products) { }
 
 		public async Task AddProduct(string announcementId, params Product[] products)
 		{

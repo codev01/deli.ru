@@ -4,8 +4,8 @@ using deli.data.MongoDB.Services.Contracts;
 
 namespace deli.data.MongoDB.Services
 {
-	public class AppService : MongoServiceBase<App>, IAppService
+	public class AppService : Mongo_Service_Base<App>, IAppService
 	{
-		public AppService(DataBaseManager dataBaseManager) : base(dataBaseManager.Private.Apps) { }
+		public AppService(DatabaseManager_ dataBaseManager) : base(dataBaseManager.Private.Apps) { }
 	}
 }

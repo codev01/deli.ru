@@ -7,11 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace deli.data.MongoDB.DataBases
 {
-	public class MainDB : MongoManager
+	public class MainDB_ : _MongoManager
 	{
 		public CollectionDependency Announcements { get; set; }
 		public CollectionDependency Products { get; set; }
-		public MainDB(IDataBaseConnection dataBaseConnection, IServiceCollection services)
+		public MainDB_(IDataBaseConnection_ dataBaseConnection, IServiceCollection services)
 			: base(dataBaseConnection, services) { }
 
 		protected override IServiceCollection RegisterServices(IServiceCollection services)

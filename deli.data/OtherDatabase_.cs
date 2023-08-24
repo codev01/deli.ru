@@ -1,6 +1,6 @@
 ﻿namespace deli.data
 {
-	public class OtherDatabase
+	public class OtherDatabase_
 	{
 	}
 }

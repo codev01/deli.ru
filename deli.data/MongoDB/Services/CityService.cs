@@ -8,9 +8,9 @@ using MongoDB.Driver;
 
 namespace deli.data.MongoDB.Services
 {
-	public class CityService : MongoServiceBase<City>, ICityService
+	public class CityService : Mongo_Service_Base<City>, ICityService
 	{
-		public CityService(DataBaseManager dataBaseManager) : base(dataBaseManager.Common.Cities) { }
+		public CityService(DatabaseManager_ dataBaseManager) : base(dataBaseManager.Common.Cities) { }
 
 		public async Task<IEnumerable<City>> SearchCities(string searchString, int limit = 100, int offset = 0)
 		{

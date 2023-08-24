@@ -7,24 +7,23 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace deli.data.MongoDB.DataBases
 {
-	public class PrivateDB : MongoManager
+	public class CommonDB_ : _MongoManager
 	{
-		public CollectionDependency Apps { get; set; }
-		public CollectionDependency Accounts { get; set; }
-		public PrivateDB(IDataBaseConnection dataBaseConnection, IServiceCollection services)
+		public CollectionDependency Cities { get; set; }
+		public CollectionDependency Categories { get; set; }
+		public CommonDB_(IDataBaseConnection_ dataBaseConnection, IServiceCollection services)
 			: base(dataBaseConnection, services) { }
 
 		protected override IServiceCollection RegisterServices(IServiceCollection services)
 		{
-			services.AddSingleton<IAppService, AppService>();
-			services.AddSingleton<IAccountService, AccountService>();
+			services.AddSingleton<ICityService, CityService>();
 			return services;
 		}
 
 		protected override void RegisterCollections()
 		{
-			Apps = new CollectionDependency("apps", this);
-			Accounts = new CollectionDependency("accounts", this);
+			Cities = new CollectionDependency("cities", this);
+			Categories = new CollectionDependency("categories", this);
 		}
 	}
 }

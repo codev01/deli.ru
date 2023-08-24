@@ -1,5 +1,7 @@
 ﻿using System.Net;
 
+using deli.api.Extensions;
+
 namespace deli.api.Handlers
 {
 	public abstract class ExceptionHandlerMiddleware
@@ -23,12 +25,8 @@ namespace deli.api.Handlers
 				// тут нужно добавить запись в лог ...
 				//Logger.Error(e, context.Request.Path.StringId);
 
-				context.Response.ContentType = "application/json";
-
-				var (status, errorTipe, message) = GetResponse(e);
-				context.Response.StatusCode = (int)status;
-
-				await context.Response.WriteAsync(Utils.JsonSerializer(new Error(errorTipe, e)));
+				var (statusCode, errorType, message) = GetResponse(e);
+				await context.Response.WriteResponseAsync(new Error(errorType, message, "ExceptionHandlerMiddleware",  e), statusCode);
 			}
 		}
 	}

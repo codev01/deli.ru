@@ -10,7 +10,7 @@ namespace deli.api.Controllers
 {
 	[ApiController]
 	[Route("[controller].[action]")]
-	[Auth(Roles = Roles.All, Scopes = Scopes.Products)]
+	[Auth(Scopes = Scopes.Products)]
 	public class ProductController : Controller
 	{
 		//private readonly IFileService _fileService;

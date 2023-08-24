@@ -6,7 +6,7 @@ using deli.api.Services.Contracts;
 
 using deli.data.MongoDB.Models;
 using deli.data.MongoDB.Services.Contracts;
-
+using deli.runtime;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace deli.api.Controllers
 {
-	[ApiController]
+    [ApiController]
 	[Route("[controller].[action]")]
 	public class AuthController : Controller
 	{
@@ -49,15 +49,7 @@ namespace deli.api.Controllers
 					return Unauthorized("Incorrect password");
 
 				var claims = _authService.GetUserIdentity(account).Claims;
-				var appClaims = User.Claims.ToList();
-				foreach (var claim in appClaims)
-					if (claim.Type == ClaimTypes.Role && claim.Value == Roles.Guest)
-					{
-						appClaims.Remove(claim);
-						break;
-					}
-				var identity = new ClaimsIdentity(claims.Union(appClaims));
-
+				var identity = new ClaimsIdentity(User.Claims.Union(claims));
 				string token = _authService.GenerateToken(identity);
 
 				// был ли изменён у пользователя пароль до авторизации по полю "isLogined"
@@ -66,6 +58,7 @@ namespace deli.api.Controllers
 					// изменяем флаг в аккаунте в БД на true
 					_accountService.UpdateField(account.Id, a => a.IsLogined, true);
 				}
+				_ContainerManager.AddUser(new runtime.Containers.UserContainer_(user_name, token, HttpContext.Connection.RemoteIpAddress));
 
 				return Ok(new { user_name = user_name, token = token });
 			}
@@ -91,6 +84,7 @@ namespace deli.api.Controllers
 				var claims = _authService.GetAppIdentity(app).Claims;
 				var identity = new ClaimsIdentity(claims);
 				string token = _authService.GenerateToken(identity);
+				_ContainerManager.AddApp(new runtime.Containers.ApplicationContainer_(appId, token, app.RateLimit));
 
 				return Ok(new { appToken = token });
 			}

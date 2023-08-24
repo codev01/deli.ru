@@ -63,8 +63,9 @@ namespace deli.api.Services
 			{
 				var claims = new List<Claim>
 				{
+					GetClaimTypeIdentity(TypeIdentity.Application),
+					GetClaimRoleDefault(),
 					new Claim(JWTClaimTypes.AppId, app.Id.StringId),
-					new Claim(ClaimTypes.Role, Roles.Guest),
 					new Claim(JWTClaimTypes.AppVersion, app.Version.ToString())
 				};
 				foreach (var scope in app.Scopes)
@@ -84,9 +85,13 @@ namespace deli.api.Services
 			{
 				var claims = new List<Claim>
 				{
-					new Claim(JWTClaimTypes.UserName, account.UserName),
-					new Claim(ClaimTypes.Role, account.Role)
+					GetClaimTypeIdentity(TypeIdentity.User),
+					new Claim(JWTClaimTypes.AccountId, account.Id),
+					new Claim(JWTClaimTypes.UserName, account.UserName)
 				};
+				foreach (string role in account.Roles)
+					claims.Add(new Claim(JWTClaimTypes.Roles, role));
+
 				ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims);
 				return claimsIdentity;
 			}
@@ -94,6 +99,11 @@ namespace deli.api.Services
 				// если пользователя не найдено
 				throw new ArgumentException("Invalid user_name or password.");
 		}
+
+		private Claim GetClaimTypeIdentity(TypeIdentity typeIdentity) 
+			=> new Claim(JWTClaimTypes.Identities, typeIdentity.ToString());
+		private Claim GetClaimRoleDefault()
+			=> new Claim(JWTClaimTypes.Roles, Roles.Guest);
 
 		public TokenValidationParameters GetTokenValidationParameters() => new TokenValidationParameters
 		{
