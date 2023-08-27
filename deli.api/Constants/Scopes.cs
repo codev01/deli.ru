@@ -2,7 +2,14 @@
 {
 	public class Scopes
 	{
-		public const string All = $"{Categories}, {Products}, {Cities}, {Transactions}, {Feedbacks}, {Users}, {Announcements}, {ConfidentionalInfo}, {Serach}";
+		public const string All = $"{Categories}," +
+								  $"{Products},{Cities}," +
+								  $"{Transactions}," +
+								  $"{Feedbacks}," +
+								  $"{Users}," +
+								  $"{Announcements}," +
+								  $"{ConfidentionalInfo}," +
+								  $"{Serach}";
 		public const string Categories = "categories";
 		public const string Products = "products";
 		public const string Cities = "cities";

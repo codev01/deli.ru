@@ -2,6 +2,7 @@
 using System.Security.Claims;
 
 using deli.api.Constants;
+using deli.api.Extensions;
 using deli.api.Services.Contracts;
 
 using deli.data.MongoDB.Models;
@@ -12,10 +13,13 @@ using Microsoft.AspNetCore.Mvc;
 
 using Newtonsoft.Json;
 
+using NuGet.Common;
+
 namespace deli.api.Controllers
 {
-    [ApiController]
+	[ApiController]
 	[Route("[controller].[action]")]
+	[Auth(Scopes = Scopes.Auth)]
 	public class AuthController : Controller
 	{
 		private readonly IAuthService _authService;
@@ -36,7 +40,7 @@ namespace deli.api.Controllers
 		}
 
 		[HttpGet]
-		[Auth(Roles = Roles.Guest, Scopes = Scopes.Auth)]
+		[Auth(Roles = Roles.Guest)]
 		public async Task<IActionResult> UserLogin([Required] string user_name,
 												   [Required] string password)
 		{
@@ -48,16 +52,16 @@ namespace deli.api.Controllers
 				if (account.Password != password)
 					return Unauthorized("Incorrect password");
 
-				var claims = _authService.GetUserIdentity(account).Claims;
-				var identity = new ClaimsIdentity(User.Claims.Union(claims));
+				var identity = _authService.GetUserIdentity(account);
+				identity.AddClaims(User.Claims);
+				identity.RemoveClaim(identity.Claims.GetClaim(ClaimTypes.Role));
 				string token = _authService.GenerateToken(identity);
 
 				// был ли изменён у пользователя пароль до авторизации по полю "isLogined"
 				if (!account.IsLogined)
-				{
 					// изменяем флаг в аккаунте в БД на true
 					_accountService.UpdateField(account.Id, a => a.IsLogined, true);
-				}
+
 				_ContainerManager.AddUser(new runtime.Containers.UserContainer_(user_name, token, HttpContext.Connection.RemoteIpAddress));
 
 				return Ok(new { user_name = user_name, token = token });
@@ -81,17 +85,40 @@ namespace deli.api.Controllers
 				if (app.ClientSecret != clientSecret)
 					return Unauthorized("Incorrect secret");
 
-				var claims = _authService.GetAppIdentity(app).Claims;
-				var identity = new ClaimsIdentity(claims);
+				var identity = _authService.GetAppIdentity(app);
 				string token = _authService.GenerateToken(identity);
 				_ContainerManager.AddApp(new runtime.Containers.ApplicationContainer_(appId, token, app.RateLimit));
 
-				return Ok(new { appToken = token });
+				return Ok(new { app_name = app.Name, token = token });
 			}
 			catch (Exception e)
 			{
 				return Unauthorized(new { errorText = e.Message });
 			}
+		}
+
+		[HttpGet]
+		[Auth(Roles = Roles.Tenant)]
+		public async Task<IActionResult> ChangeRoleToLandlord()
+		{
+			var accountIdClaim = User.Claims.GetClaim(JWTClaimTypes.UserName).Value;
+			Account account = (await _accountService.GetAccount(accountIdClaim));
+
+			if (account.Roles.Any(r => r == Roles.Landlord))
+				return BadRequest($"User already has a role '{Roles.Landlord}'");
+
+			var identity = new ClaimsIdentity(User.Claims);
+			identity.AddClaim(new Claim(JWTClaimTypes.Roles, Roles.Landlord));
+			var roles = identity.Claims.GetClaims(ClaimTypes.Role).ToArray();
+			foreach (Claim claim in roles)
+			{
+				identity.RemoveClaim(claim);
+				identity.AddClaim(_authService.CreateClaim(JWTClaimTypes.Roles, claim.Value));
+			}
+			_accountService.AddItemArray(account.Id, a => a.Roles, Roles.Landlord);
+			string token = _authService.GenerateToken(identity);
+
+			return Ok(new { user_name = account.UserName, token = token});
 		}
 	}
 }

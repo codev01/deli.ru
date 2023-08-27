@@ -12,7 +12,7 @@ namespace deli.api.Controllers
 {
 	[ApiController]
 	[Route("[controller].[action]")]
-	[Auth(Policy = Policies.TenantAndLandlord, Scopes = Scopes.Announcements)]
+	[Auth(Scopes = Scopes.Announcements)]
 	public class AnnouncementController : Controller
 	{
 		private readonly IAnnouncementService _announcementService;
@@ -20,10 +20,12 @@ namespace deli.api.Controllers
 			=> _announcementService = categoryService;
 
 		[HttpGet]
+		[Auth(Roles = Roles.All)]
 		public async Task<IEnumerable<Announcement>> GetById([FromQuery] string[] categoryIds)
 			=> await _announcementService.GetById(categoryIds);
 
 		[HttpPost]
+		[Auth(Roles = Roles.Landlord)]
 		public async Task<IActionResult> AddAnnouncement([Required] Announcement announcement)
 		{
 			await _announcementService.AddAnnouncement(announcement);
@@ -31,6 +33,7 @@ namespace deli.api.Controllers
 		}
 
 		[HttpGet]
+		[Auth(Roles = Roles.All)]
 		public async Task<IEnumerable<Announcement>> GetAnnouncements([Required] string searchString,
 																	  string categoryId,
 																	  bool? isPublished,

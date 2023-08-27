@@ -61,17 +61,13 @@ namespace deli.api.Services
 		{
 			if (app != null)
 			{
-				var claims = new List<Claim>
-				{
-					GetClaimTypeIdentity(TypeIdentity.Application),
-					GetClaimRoleDefault(),
-					new Claim(JWTClaimTypes.AppId, app.Id.StringId),
-					new Claim(JWTClaimTypes.AppVersion, app.Version.ToString())
-				};
+				ClaimsIdentity claimsIdentity = new ClaimsIdentity();
+				claimsIdentity.AddClaim(CreateClaimIdentity(TypeIdentity.Application));
+				claimsIdentity.AddClaim(CreateClaim(JWTClaimTypes.Roles, Roles.Guest));
+				claimsIdentity.AddClaim(CreateClaim(JWTClaimTypes.AppId, app.Id.StringId));
+				claimsIdentity.AddClaim(CreateClaim(JWTClaimTypes.AppVersion, app.Version.ToString()));
 				foreach (var scope in app.Scopes)
-					claims.Add(new Claim(JWTClaimTypes.Scope, scope));
-
-				ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims);
+					claimsIdentity.AddClaim(new Claim(JWTClaimTypes.Scope, scope));
 				return claimsIdentity;
 			}
 			else
@@ -83,16 +79,12 @@ namespace deli.api.Services
 		{
 			if (account != null)
 			{
-				var claims = new List<Claim>
-				{
-					GetClaimTypeIdentity(TypeIdentity.User),
-					new Claim(JWTClaimTypes.AccountId, account.Id),
-					new Claim(JWTClaimTypes.UserName, account.UserName)
-				};
+				ClaimsIdentity claimsIdentity = new ClaimsIdentity();
+				claimsIdentity.AddClaim(CreateClaimIdentity(TypeIdentity.User));
+				claimsIdentity.AddClaim(CreateClaim(JWTClaimTypes.AccountId, account.Id));
+				claimsIdentity.AddClaim(CreateClaim(JWTClaimTypes.UserName, account.UserName));
 				foreach (string role in account.Roles)
-					claims.Add(new Claim(JWTClaimTypes.Roles, role));
-
-				ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims);
+					claimsIdentity.AddClaim(new Claim(JWTClaimTypes.Roles, role));
 				return claimsIdentity;
 			}
 			else
@@ -100,7 +92,10 @@ namespace deli.api.Services
 				throw new ArgumentException("Invalid user_name or password.");
 		}
 
-		private Claim GetClaimTypeIdentity(TypeIdentity typeIdentity) 
+		public Claim CreateClaim(string type, string value)
+			=> new Claim(type, value);
+
+		private Claim CreateClaimIdentity(TypeIdentity typeIdentity) 
 			=> new Claim(JWTClaimTypes.Identities, typeIdentity.ToString());
 		private Claim GetClaimRoleDefault()
 			=> new Claim(JWTClaimTypes.Roles, Roles.Guest);

@@ -11,6 +11,7 @@ namespace deli.api.Services.Contracts
 		string GenerateToken(ClaimsIdentity identity);
 		ClaimsIdentity GetAppIdentity(App app);
 		ClaimsIdentity GetUserIdentity(Account account);
+		Claim CreateClaim(string type, string value);
 		Task<ClaimsPrincipal> ValidateToken(string token, TokenValidationParameters validationParameters);
 		TokenValidationParameters GetTokenValidationParameters();
 	}

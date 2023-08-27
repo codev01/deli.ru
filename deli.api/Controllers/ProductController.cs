@@ -24,10 +24,12 @@ namespace deli.api.Controllers
 		}
 
 		[HttpGet]
+		[Auth(Roles = Roles.All)]
 		public Task<IEnumerable<Product>> GetById(string[] ids)
 			=> _productService.GetById(ids);
 
 		[HttpPost]
+		[Auth(Roles = Roles.Landlord)]
 		public async Task<IActionResult> AddProducts([Required] string announcementId, [Required] Product[] products)
 		{
 			await _productService.AddProduct(announcementId, products);

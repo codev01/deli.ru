@@ -97,7 +97,7 @@ namespace deli.api.Middlewares
 					{
 						AuthenticateResult authenticateResult = await context.AuthenticateAsync();
 						if (authenticateResult.Failure is not null)
-							throw authenticateResult.Failure;
+							throw new ResponseException(authenticateResult.Failure, HttpStatusCode.Unauthorized);
 						else
 							throw new ResponseException("Authentication failed for unknown reason", HttpStatusCode.Unauthorized);
 					}

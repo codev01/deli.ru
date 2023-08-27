@@ -35,7 +35,20 @@ namespace deli.data.Bases
 			await Collection.UpdateOneAsync(filter, update);
 		}
 
+		public virtual async void AddItemArray<TField>(BsonObjectId id, Expression<Func<T, IEnumerable<TField>>> field, TField value)
+		{
+			var filter = Builders<T>.Filter.Eq(p => p.Id, id);
+			var update = Builders<T>.Update.Push(field, value);
+			await Collection.UpdateOneAsync(filter, update);
+		}
+
 		public virtual async void AddDocument(T document)
 			=> await Collection.InsertOneAsync(document);
+
+		public virtual async Task<DeleteResult> DeleteById(string[] ids)
+		{
+			var filter = Builders<T>.Filter.In(x => x.Id, BsonObjectId.ConvertStrArray(ids));
+			return await Collection.DeleteManyAsync(filter);
+		}
 	}
 }
