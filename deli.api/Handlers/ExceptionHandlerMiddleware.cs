@@ -26,7 +26,7 @@ namespace deli.api.Handlers
 				//Logger.Error(e, context.Request.Path.StringId);
 
 				var (statusCode, errorType, message) = GetResponse(e);
-				await context.Response.WriteResponseAsync(new Error(errorType, message, "ExceptionHandlerMiddleware",  e), statusCode);
+				await context.Response.WriteResponseAsync(new Error(errorType, message, "ExceptionHandlerMiddleware", e), statusCode);
 			}
 		}
 	}

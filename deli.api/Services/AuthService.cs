@@ -95,7 +95,7 @@ namespace deli.api.Services
 		public Claim CreateClaim(string type, string value)
 			=> new Claim(type, value);
 
-		private Claim CreateClaimIdentity(TypeIdentity typeIdentity) 
+		private Claim CreateClaimIdentity(TypeIdentity typeIdentity)
 			=> new Claim(JWTClaimTypes.Identities, typeIdentity.ToString());
 		private Claim GetClaimRoleDefault()
 			=> new Claim(JWTClaimTypes.Roles, Roles.Guest);

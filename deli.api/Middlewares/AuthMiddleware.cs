@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Security.Claims;
 
 using deli.api.Constants;
@@ -59,7 +58,7 @@ namespace deli.api.Middlewares
 									var appIdClaim = claims.GetClaim(JWTClaimTypes.AppId);
 									var applicationContainer = _ContainerManager.GetApp(appIdClaim?.Value);
 
-									if (applicationContainer is not null && 
+									if (applicationContainer is not null &&
 										!applicationContainer.IsTerminated &&
 										applicationContainer.ValidateToken(token))
 									{
@@ -69,7 +68,7 @@ namespace deli.api.Middlewares
 											throw new ResponseException($"The number of method calls per second has been reached. This application has a 'RateLimit' = {applicationContainer.RateLimit}", HttpStatusCode.TooManyRequests);
 									}
 									else
-										await CheckAppAuthDatabase(context, authAttribute, appIdClaim);										
+										await CheckAppAuthDatabase(context, authAttribute, appIdClaim);
 
 									break;
 
@@ -77,8 +76,8 @@ namespace deli.api.Middlewares
 									var userNameClaim = claims.GetClaim(JWTClaimTypes.UserName);
 									var userContainer = _ContainerManager.GetUser(userNameClaim?.Value);
 
-									if (userContainer is not null && 
-										!userContainer.IsTerminated && 
+									if (userContainer is not null &&
+										!userContainer.IsTerminated &&
 										userContainer.ValidateToken(token))
 									{
 										if (userContainer.CheckIPAddress(context.Connection.RemoteIpAddress))

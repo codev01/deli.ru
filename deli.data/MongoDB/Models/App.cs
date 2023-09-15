@@ -2,7 +2,7 @@
 
 namespace deli.data.MongoDB.Models
 {
-    public class App : IBsonObject, IRuntimeApplication
+	public class App : IBsonObject, IRuntimeApplication
 	{
 		public BsonObjectId Id { get; set; }
 		public string Name { get; set; }

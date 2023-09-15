@@ -1,10 +1,5 @@
 ﻿using deli.api.Constants;
 
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-
-using NuGet.Common;
-
 namespace deli.api.Handlers
 {
 	public static class RequestExtension

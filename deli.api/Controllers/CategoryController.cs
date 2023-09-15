@@ -17,14 +17,10 @@ namespace deli.api.Controllers
 
 		[HttpGet]
 		public async Task<IEnumerable<Category>> GetById([FromQuery] string[] categoryIds)
-		{
-			return await _categoryService.GetById(categoryIds);
-		}
+			=> await _categoryService.GetById(categoryIds);
 
 		[HttpGet]
 		public async Task<IEnumerable<Category>> GetCategories()
-		{
-			return await _categoryService.GetCategories();
-		}
+			=> await _categoryService.GetCategories();
 	}
 }

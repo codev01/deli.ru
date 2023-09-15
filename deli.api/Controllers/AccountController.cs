@@ -6,7 +6,6 @@ namespace deli.api.Controllers
 	[Route("[controller].[action]")]
 	public class AccountController : Controller
 	{
-
 		[HttpPut]
 		[Auth]
 		public async Task<IActionResult> ChangeEmail()

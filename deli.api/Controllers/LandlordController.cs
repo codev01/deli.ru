@@ -6,7 +6,7 @@ namespace deli.api.Controllers
 {
 	[Route("[controller].[action]")]
 	[ApiController]
-	public class LandlordController : ControllerBase
+	public class LandlordController : Controller
 	{
 		/// <summary>
 		/// Получить информацию о пользователе, как о арендодателе

@@ -8,12 +8,11 @@ using deli.api.Services.Contracts;
 using deli.data.MongoDB.Models;
 using deli.data.MongoDB.Services.Contracts;
 using deli.runtime;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using Newtonsoft.Json;
-
-using NuGet.Common;
 
 namespace deli.api.Controllers
 {
@@ -118,7 +117,7 @@ namespace deli.api.Controllers
 			_accountService.AddItemArray(account.Id, a => a.Roles, Roles.Landlord);
 			string token = _authService.GenerateToken(identity);
 
-			return Ok(new { user_name = account.UserName, token = token});
+			return Ok(new { user_name = account.UserName, token = token });
 		}
 	}
 }

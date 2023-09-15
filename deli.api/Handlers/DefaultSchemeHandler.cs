@@ -1,6 +1,5 @@
 ﻿using System.Text.Encodings.Web;
 
-using deli.api.Constants;
 using deli.api.Services.Contracts;
 
 using Microsoft.AspNetCore.Authentication;
@@ -33,14 +32,14 @@ namespace deli.api.Handlers
 		{
 			// пример получения свойств
 			//Options.ApiKey
-			
+
 			try
 			{
 #if DEBUG_AUTHDISABLE
 				context.Request.Headers[Headers.TokenHeaderName] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImNvZGV2MDEiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJsYW5kbG9yZCIsImFwcElkIjoiNjQ5MjA0OGZkMTAzOGJmNThjNGEzMGQ2IiwiYXBwVmVyc2lvbiI6IjEiLCJzY29wZSI6WyJjYXRlZ29yaWVzIiwiY2l0aWVzIiwic2VhcmNoIiwidXNlcnMiLCJmZWVkYmFja3MiLCJwcm9kdWN0cyIsImFubm91bmNlbWVudHMiLCJhdXRoIl0sIm5iZiI6MTY5MTg5NTc0NCwiZXhwIjoxNjk0NDg3NzQ0LCJpc3MiOiJkZWxpLmFwaSIsImF1ZCI6WyJkZWxpLmNsaWVudCIsImRlbGkuY2xpZW50Il19.61HF9iUzuqpkqxvlDCLQrbYX7kgLfq_VdgqLSOJklZ8";
 #endif
 				Context.Request.SetScheme(Scheme.Name);
-				
+
 				// проверяем токен
 				var claimsPrincipal = await _authService.ValidateToken(Request.GetToken(), _authService.GetTokenValidationParameters());
 
